@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<title>AquaRev Global Compliance Map</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F7F9; --surface:#FFFFFF; --surface-2:#EAF0F3; --line:#D3DEE5; --line-strong:#AFC0CB;
+  --ink:#122736; --ink-2:#3E5364; --ink-3:#6F8494;
+  --accent:#0C6F7C; --accent-ink:#FFFFFF; --accent-soft:#D6EBEE;
+  --gate-none:#2E7D4F; --gate-none-bg:#DDF0E4;
+  --gate-notify:#9A6A10; --gate-notify-bg:#F7EBCB;
+  --gate-approve:#A8402C; --gate-approve-bg:#F6DCD5;
+  --cert-req:#3B4FA8; --cert-req-bg:#DEE3F7;
+  --code-bg:#EEF2F5;
+  --shadow:0 1px 2px rgba(18,39,54,.06),0 8px 24px -12px rgba(18,39,54,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171E; --surface:#152129; --surface-2:#1C2B35; --line:#2A3B47; --line-strong:#3D5261;
+    --ink:#E4ECF1; --ink-2:#B4C3CE; --ink-3:#7F92A0;
+    --accent:#4FB7C4; --accent-ink:#0B1A1E; --accent-soft:#163A40;
+    --gate-none:#7DD3A0; --gate-none-bg:#173526;
+    --gate-notify:#E6B95A; --gate-notify-bg:#3A2E12;
+    --gate-approve:#F0907C; --gate-approve-bg:#44201A;
+    --cert-req:#9FB0F2; --cert-req-bg:#222C4F;
+    --code-bg:#1B2831;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E171E; --surface:#152129; --surface-2:#1C2B35; --line:#2A3B47; --line-strong:#3D5261;
+  --ink:#E4ECF1; --ink-2:#B4C3CE; --ink-3:#7F92A0;
+  --accent:#4FB7C4; --accent-ink:#0B1A1E; --accent-soft:#163A40;
+  --gate-none:#7DD3A0; --gate-none-bg:#173526;
+  --gate-notify:#E6B95A; --gate-notify-bg:#3A2E12;
+  --gate-approve:#F0907C; --gate-approve-bg:#44201A;
+  --cert-req:#9FB0F2; --cert-req-bg:#222C4F;
+  --code-bg:#1B2831;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;padding-block:0 96px;padding-inline:clamp(16px,4vw,48px)}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+a:hover,a:focus-visible{border-bottom-color:currentColor}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-variation-settings:"wdth" 88;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(30px,4.2vw,46px);font-weight:700}
+h2{font-size:clamp(22px,2.6vw,28px);font-weight:700;padding-top:6px}
+h3{font-size:18px;font-weight:600}
+h4{font-size:15px;font-weight:600}
+p{margin:0}
+code,.code{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--code-bg);padding:.08em .35em;border-radius:3px;color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto}
+.eyebrow{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 82;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:600;color:var(--ink-3)}
+.lede{font-size:18px;color:var(--ink-2);max-width:68ch}
+
+/* masthead */
+.mast{padding-block:44px 28px;border-bottom:2px solid var(--ink);display:grid;gap:18px}
+.mast .meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14px;color:var(--ink-3)}
+.mast .meta b{color:var(--ink-2);font-weight:600}
+
+/* device profile */
+.profile{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border:1px solid var(--line);background:var(--surface);margin-top:28px}
+.profile>div{padding:14px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.profile .k{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-family:"Archivo",sans-serif;font-weight:600;margin-bottom:4px}
+.profile .v{font-size:15px;color:var(--ink)}
+
+/* layers */
+.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.layer{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.layer .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);font-weight:500}
+.layer p{font-size:14px;color:var(--ink-2)}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:3px;white-space:nowrap;line-height:1.3}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.g-none{color:var(--gate-none);background:var(--gate-none-bg)}
+.g-notify{color:var(--gate-notify);background:var(--gate-notify-bg)}
+.g-approve{color:var(--gate-approve);background:var(--gate-approve-bg)}
+.c-req{color:var(--cert-req);background:var(--cert-req-bg)}
+.c-none{color:var(--ink-3);background:var(--surface-2)}
+.c-none::before,.c-req::before{display:none}
+.p-silent{color:var(--gate-none);background:var(--gate-none-bg)}
+.p-clause{color:var(--gate-notify);background:var(--gate-notify-bg)}
+.p-closed{color:var(--gate-approve);background:var(--gate-approve-bg)}
+.trig{font-size:11.5px;color:var(--ink-2);margin-top:4px;max-width:190px;line-height:1.3}
+.trig b{color:var(--gate-approve);font-weight:600}
+.rule{font-size:12.5px;color:var(--ink-2);margin-top:4px;max-width:440px;line-height:1.35}
+.rule a{font-family:"IBM Plex Mono",monospace;font-size:11px}
+td.st{font-weight:600;white-space:nowrap;scroll-margin-top:80px}
+tr[id]{scroll-margin-top:80px}
+tr:target td{background:var(--accent-soft)}
+.conf{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);letter-spacing:.02em}
+td .conf{white-space:nowrap}
+
+/* section heads */
+section{margin-top:56px}
+.sechead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;border-bottom:1px solid var(--line-strong);padding-bottom:10px;margin-bottom:22px}
+.sechead p{color:var(--ink-3);font-size:14px}
+
+/* controls */
+.controls{position:sticky;top:0;z-index:5;background:var(--ground);padding-block:12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:36px}
+.controls input[type=search]{flex:1 1 260px;min-width:0;font:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:4px}
+.controls .filters{display:flex;flex-wrap:wrap;gap:6px}
+.controls button{font:inherit;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);border-radius:3px;cursor:pointer}
+.controls button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.controls .count{font-size:13px;color:var(--ink-3);margin-left:auto}
+.jump{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px;width:100%}
+.jump a{color:var(--ink-2)}
+
+/* matrix table */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:1240px;font-size:14px}
+th{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);text-align:left;padding:10px 12px;border-bottom:2px solid var(--line-strong);background:var(--surface-2);position:sticky;top:0;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.region td{background:var(--surface-2);font-family:"Archivo",sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding-block:7px}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+td.j{font-weight:600;white-space:nowrap}
+td.j a{color:var(--ink)}
+tbody tr:hover td{background:color-mix(in srgb,var(--accent-soft) 40%,transparent)}
+tr.region:hover td{background:var(--surface-2)}
+
+/* jurisdiction cards */
+.cards{display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);scroll-margin-top:96px}
+.card.hidden{display:none}
+.card header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.card header h3{margin-right:auto}
+.card header .wq{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;background:var(--code-bg);padding:3px 8px;border-radius:3px}
+.rows{display:grid;grid-template-columns:150px 1fr}
+.rows>div{padding:10px 20px;border-bottom:1px solid var(--line);font-size:14.5px}
+.rows>div:nth-last-child(-n+2){border-bottom:0}
+.rows .k{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:12px}
+.rows .v{color:var(--ink);max-width:90ch}
+.rows .v .conf{margin-left:6px}
+.rows .path{background:var(--accent-soft)}
+.rows .path.v{font-weight:600;color:var(--ink)}
+.rows .path.k{color:var(--accent)}
+.rows .v ul{margin:0;padding-left:18px}
+.rows .v li{margin-bottom:3px}
+@media (max-width:640px){.rows{grid-template-columns:1fr}.rows .k{padding-bottom:0;border-bottom:0}.rows .v{padding-top:4px}.rows>div:nth-last-child(-n+2){border-bottom:1px solid var(--line)}.rows>div:last-child{border-bottom:0}}
+
+/* rules + gaps */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.rule{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);padding:16px 18px;display:grid;gap:8px;align-content:start}
+.rule.hard{border-top-color:var(--gate-approve)}
+.rule p,.rule li{font-size:14.5px;color:var(--ink-2)}
+.rule ul{margin:0;padding-left:18px}
+.floors{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
+.floors>div{background:var(--surface);padding:10px 12px}
+.floors .n{font-family:"IBM Plex Mono",monospace;font-size:20px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.floors .n small{font-size:12px;color:var(--ink-3);margin-left:3px}
+.floors .w{font-size:13px;color:var(--ink-2);line-height:1.35}
+.gaps ol{margin:0;padding-left:22px;display:grid;gap:8px;max-width:90ch}
+.gaps li{color:var(--ink-2)}
+.gaps li b{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:var(--ink-2);margin-top:14px;align-items:center}
+.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3);max-width:90ch}
+.foot p+p{margin-top:8px}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">AquaRev Water · Regulatory reference · September 2026</div>
+  <h1>AquaRev Global Compliance Map</h1>
+  <p class="lede">What each country requires before an AquaRev Water Conditioning Device is installed on the return line of a commercial or public swimming pool. Built outward from the device's NSF/ANSI/CAN 50 certification, covering 60 jurisdictions on five continents and every US state.</p>
+  <div class="meta"><span><b>For</b> Property owners and operators, chief engineers, consultants, installers and approving authorities</span><span><b>Scope</b> Hotels, resorts, municipal and club pools</span><span><b>Basis</b> Primary legislation and health-authority guidance; each finding states its source basis</span></div>
+</header>
+
+<section>
+  <div class="sechead"><h2>The device and its certification</h2><p>Every finding below rests on these facts.</p></div>
+  <div class="profile">
+    <div><div class="k">Product</div><div class="v">Passive in-line Water Conditioning Device, PVC body, Schedule 40 unions</div></div>
+    <div><div class="k">Certification</div><div class="v">NSF/ANSI/CAN 50-2024 by IAPMO R&amp;T, File <code>W-12547</code>; USPC mark; listed to the Uniform Swimming Pool, Spa and Hot Tub Code</div></div>
+    <div><div class="k">Certified claim</div><div class="v">41% reduction in chlorine needed to maintain test-pool chemistry (NSF 50 Section 25 reduction-claim protocol)</div></div>
+    <div><div class="k">Materials</div><div class="v">NSF/ANSI 372 lead-free; California Prop 65 compliant; made in USA</div></div>
+    <div><div class="k">What it is not</div><div class="v">No electricity, no moving parts, no chemicals, no consumables, no supply/drain/sewer connection. Not a disinfectant. Chlorine and pH regime unchanged.</div></div>
+    <div><div class="k">Hydraulics</div><div class="v">Rated head loss 2.6 psi (0.18 bar); measured 0.4 psi at 26 gpm to 2.6 psi at 72 gpm</div></div>
+  </div>
+
+  <div class="layers">
+    <div class="layer"><span class="n">Layer 1</span><h4>Product certification</h4><p>Does the law require a product standard for pool circulation equipment, and does IAPMO's NSF 50 certificate satisfy it?</p></div>
+    <div class="layer"><span class="n">Layer 2</span><h4>Process approval</h4><p>Does the health authority restrict treatment to approved methods, and does a non-disinfecting device fall inside that restriction?</p></div>
+    <div class="layer"><span class="n">Layer 3</span><h4>Materials and pressure</h4><p>Plumbing-product marks (WRAS, WaterMark, CE/PED), potable-contact rules, pressure-equipment thresholds.</p></div>
+    <div class="layer"><span class="n">Layer 4</span><h4>Permission to install</h4><p>Whether cutting a device into an existing licensed pool's return line triggers plan review, a permit, or a notification, and to whom.</p></div>
+    <div class="layer"><span class="n">Layer 5</span><h4>Water-quality floor</h4><p>The free-chlorine and pH range the pool must still hold. The 41% claim reduces demand, never the residual.</p></div>
+  </div>
+  <div class="legend">
+    <span class="chip g-none">None needed</span><span>Install and log; no authority step.</span>
+    <span class="chip g-notify">Notify authority</span><span>Written notice or file update to the authority.</span>
+    <span class="chip g-approve">Approval required</span><span>Written approval, permit or plan review before install.</span>
+    <span class="chip c-req">NSF 50 required</span><span>Standard named in the code.</span>
+  </div>
+  <div class="legend">
+    <span class="chip p-silent">Silent</span><span>No rule touches a passive device.</span>
+    <span class="chip p-clause">Clause</span><span>Alternative disinfectants need approval; dormant while no disinfection claim is made.</span>
+    <span class="chip p-closed">Closed list</span><span>Permitted processes are enumerated; a written opinion is needed.</span>
+    <span class="trig"><b>Conditional</b> = a specific claim or classification would trigger the requirement.</span>
+    <span class="conf">VERIFIED / SECONDARY / INFERRED</span><span>Source basis of each finding: regulation or authority text consulted directly · official or reputable summary · reasoned from the legal framework.</span>
+  </div>
+</section>
+
+<section id="matrix">
+  <div class="sechead"><h2>Summary matrix</h2><p>All five layers per jurisdiction. Free chlorine (FC) in mg/L unless noted. A red <b>Conditional</b> note names the claim or classification that would trigger an otherwise dormant requirement. Click a jurisdiction for the full card.</p></div>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Jurisdiction</th><th>Product certification</th><th>Process approval</th><th>Permission to install</th><th>FC range</th><th>pH</th><th>Authority</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr class="region"><td colspan="8">North America</td></tr>
+      <tr><td class="j"><a href="#us-fed">USA · MAHC / model codes</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span><div class="trig"><b>Conditional:</b> any "kills / controls" wording makes it an EPA FIFRA pesticide device</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (≥2.0 w/ CYA), ≤10</td><td class="num">7.2–7.8</td><td>State/local health dept</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-ca">California</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">§65529 alternative disinfectants only</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (≥2.0 w/ CYA)</td><td class="num">7.2–8.0</td><td>County Environmental Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-fl">Florida</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span><div class="trig"><b>Conditional:</b> NSF-pw marking required on recirculation plastics</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–10 (indoor ≤5)</td><td class="num">7.0–7.8</td><td>Local building dept + DOH</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-tx">Texas</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span><div class="trig"><b>Conditional:</b> if classed a "supplemental treatment system" (§265.189) it also needs EPA/FIFRA registration</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–8.0 (ideal 2–3)</td><td class="num">7.2–7.8</td><td>DSHS + local authority</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-ny">New York</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.6, ≤5.0</td><td class="num">≤7.8 (to 8.2 at ≥1.5)</td><td>County health dept</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-nv">Nevada</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>SNHD / Washoe</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-az">Arizona</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Disinfection "by other methods approved by the Department"</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>County (Maricopa, Pima)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-hi">Hawaii</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">EPA-registered alternative disinfectants only</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.6</td><td class="num">7.2–7.8</td><td>State DOH Sanitation</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-il">Illinois</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–4.0</td><td class="num">7.2–7.6</td><td>IDPH</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-ga">Georgia</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Other disinfectant agents need test results to the health authority</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (spa ≥3.0)</td><td class="num">7.2–7.8</td><td>County Board of Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-co">Colorado</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Other disinfecting equipment must be demonstrated to CDPHE</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.25–5.0 (ideal 1–3)</td><td class="num">7.2–8.0</td><td>CDPHE / county</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#us-wa">Washington</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.5 (spa ≥3.0), ≤10</td><td class="num">7.2–8.0</td><td>Local health officer</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#ca-on">Canada · Ontario</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.5–10</td><td class="num">7.2–7.8</td><td>Public Health Inspector + building dept</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#ca-bc">Canada · British Columbia</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.5 (≥1.5 &gt;30 °C)</td><td class="num">7.2–7.8</td><td>Regional health authority</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#ca-ab">Canada · Alberta</a></td><td><span class="chip c-none">Not recorded</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Approval before any change in operating procedures (s.8(1)(a))</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (≥2.0 &gt;30 °C)</td><td class="num">6.8–7.6</td><td>Alberta Health Services</td><td><span class="conf">VERIFIED (standards PDF not read)</span></td></tr>
+      <tr><td class="j"><a href="#ca-qc">Canada · Quebec</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">0.5–2.0</td><td class="num">7.0–7.8</td><td>MELCCFP</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#mx">Mexico</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">1.0–5.0 or ORP &gt;650 mV</td><td class="num">6.5–8.5</td><td>COFEPRIS / COEPRIS</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#pr">Puerto Rico</a></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span><div class="trig"><b>Conditional:</b> NSF-pw marking required on plastic pipe</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–5</td><td class="num">7.2–7.8</td><td>Salud Ambiental + OGPe</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#carib">Caribbean (JM, BB, KY, BS, TC, VI, AW, DO)</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">JM: ozone/electrolytic only; BB: SMOH-approved disinfection methods</div></td><td><span class="chip g-approve">Varies</span></td><td class="num">≥0.5 (JM, BB); 1–10 (KY)</td><td class="num">7.2–8.4</td><td>Ministry of Health / EHD</td><td><span class="conf">MIXED</span></td></tr>
+
+      <tr class="region"><td colspan="8">Europe</td></tr>
+      <tr><td class="j"><a href="#eu">EU framework</a></td><td><span class="chip c-none">Not required · no CE mark</span></td><td><span class="chip p-silent">Silent</span><div class="trig"><b>Conditional:</b> a kill/disinfect claim brings the Biocidal Products Regulation into play</div></td><td>—</td><td>—</td><td>—</td><td>National health authority</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#de">Germany</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-closed">Closed list</span><div class="trig"><b>Conditional:</b> expert report (Gutachten) if the Gesundheitsamt treats it as a DIN 19643 deviation</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.3–0.6 (0.7–1.0 warm)</td><td class="num">6.5–7.5</td><td>Gesundheitsamt</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#uk">United Kingdom</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">PWTAG Code of Practice, non-statutory</div></td><td><span class="chip g-none">None needed</span></td><td class="num">0.5–1.0 (action &gt;3)</td><td class="num">7.0–7.4</td><td>Operator (PWTAG/HSE)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#fr">France</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig"><b>Conditional:</b> ANSES authorisation (CSP D.1332-3) if presented as disinfection, chlorine stabiliser or chloramine reduction</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.4–1.4 (free active)</td><td class="num">6.9–7.7</td><td>ARS</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#es">Spain</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">Biocides need TP2 registration; device is not one</div></td><td><span class="chip g-none">None needed</span></td><td class="num">0.5–2.0</td><td class="num">7.2–8.0</td><td>Regional health (CCAA)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#it">Italy</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Disinfectants must be Ministero della Salute-authorised</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.7–1.5 (outdoor 1.0–1.5)</td><td class="num">6.5–7.5</td><td>ASL / Comune</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#nl">Netherlands</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">Goal-based; beheersplan must show art. 15.16 is met</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.5–1.5 (outdoor ≤5.0)</td><td class="num">7.0–7.6</td><td>Omgevingsdienst</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#at">Austria</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-closed">Closed list</span><div class="trig"><b>Conditional:</b> written opinion that the device sits outside the §14 BHygV process list</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.3 (≥0.5 at pH &gt;7.4)</td><td class="num">6.5–7.8</td><td>Bezirksverwaltungsbehörde</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#ch">Switzerland</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-closed">Closed list</span><div class="trig">TBDV Annex 5a covers disinfection only; SIA 385/9 conformity expected</div></td><td><span class="chip g-none">None needed</span></td><td class="num">0.2–0.8 (spa 0.7–1.5)</td><td class="num">6.8–7.6</td><td>Cantonal food inspectorate</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#pt">Portugal</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.5–1.2 / 1.0–2.0 by pH</td><td class="num">6.9–8.0</td><td>ARS / Delegado de Saúde</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#gr">Greece</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Non-chlorine methods need Health Service approval (Art. 18 §3)</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.4 (pref ≤0.7)</td><td class="num">7.2–8.2</td><td>Health Service via EUGO</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#dk">Denmark</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig"><b>Conditional:</b> municipal approval if the change "materially affects hygiene" (§3)</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.4–1.5 (outdoor 1.0–2.0)</td><td class="num">6.8–7.6</td><td>Kommune</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#se">Sweden</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.4–0.6 by pH</td><td class="num">7.2–7.6</td><td>Municipal miljökontor</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#no">Norway</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.4 (≥1.0 &gt;37 °C)</td><td class="num">7.2–7.6</td><td>Kommune</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#pl">Poland</a></td><td><span class="chip c-none">PZH atest advised</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.3–0.6</td><td class="num">6.5–7.6</td><td>PPIS (Sanepid)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#tr">Turkey</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Only Ministry-licensed disinfectants and chemicals (Art. 14)</div></td><td><span class="chip g-none">None needed</span></td><td class="num">1–1.5 indoor, 1–3 outdoor</td><td class="num">6.5–7.8</td><td>İl Sağlık Müdürlüğü</td><td><span class="conf">VERIFIED</span></td></tr>
+
+      <tr class="region"><td colspan="8">Middle East &amp; Africa</td></tr>
+      <tr><td class="j"><a href="#ae-dxb">UAE · Dubai</a></td><td><span class="chip c-none">Not required (EN cited)</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1 (≥2 &gt;26 °C), ≤10</td><td class="num">7.2–7.6</td><td>DM Health &amp; Safety / Trakhees</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#ae-auh">UAE · Abu Dhabi</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1–2</td><td class="num">7.2–7.6</td><td>Municipality Public Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#sa">Saudi Arabia</a></td><td><span class="chip c-none">SABER check</span></td><td><span class="chip p-silent">Silent</span><div class="trig"><b>Conditional:</b> SABER conformity if the HS code falls under a SASO regulation</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–3 (inferred)</td><td class="num">7.2–7.8</td><td>Balady / SBC 1401</td><td><span class="conf">INFERRED</span></td></tr>
+      <tr><td class="j"><a href="#qa">Qatar</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Reduced FC with ozone/UV needs MOPH approval</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–3 indoor, 2–4 outdoor</td><td class="num">7.2–7.8</td><td>MOPH</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#gulf">Oman · Bahrain · Kuwait · Jordan · Egypt</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">1–3 typical</td><td class="num">6.8–7.8</td><td>Ministry of Health</td><td><span class="conf">MIXED</span></td></tr>
+      <tr><td class="j"><a href="#il">Israel</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Alternative disinfectants need MoH Director approval (§6)</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.8–2.0 (≥2.5 w/ CYA)</td><td class="num">7.2–7.6</td><td>MoH district engineer</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#za">South Africa</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.5–3.0</td><td class="num">7.2–7.8</td><td>Municipal EHP</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#africa">Morocco · Tunisia · Kenya · Tanzania · Mauritius · Seychelles · Nigeria</a></td><td><span class="chip c-none">PVoC (KE, TZ)</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">WHO 1–3</td><td class="num">7.2–7.8</td><td>Health / tourism ministry</td><td><span class="conf">INFERRED</span></td></tr>
+
+      <tr class="region"><td colspan="8">Asia-Pacific</td></tr>
+      <tr><td class="j"><a href="#au">Australia · national</a></td><td><span class="chip c-none">Not required (no WaterMark)</span></td><td><span class="chip p-silent">Silent</span><div class="trig">APVMA registers chemicals only</div></td><td>—</td><td>—</td><td>—</td><td>State health + council</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#au-nsw">Australia · NSW</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">≥1.0 outdoor, ≥2.0 indoor, ≥3.0 w/ CYA</td><td class="num">7.0–7.8</td><td>Local council</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#au-qld">Australia · Queensland</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">≥1.0 (≥2.0 w/ CYA), ≤10</td><td class="num">7.2–7.8</td><td>Local council</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#au-vic">Australia · Victoria</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">≥1.0 (≥2.0 w/ CYA), ≤10</td><td class="num">7.2–7.8</td><td>Local council</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#au-wa">Australia · Western Australia</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">Plant is CHO-approved by classification; capacity changes are vetted</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥1.0 (≥2.0 &gt;26 °C), ≤8 total</td><td class="num">7.2–7.8</td><td>WA Health Water Unit</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#nz">New Zealand</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">1.5–7.0 (0.5–5.0 w/ UV/O₃)</td><td class="num">7.2–8.0</td><td>Territorial authority</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#sg">Singapore</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Only listed chlorine/bromine or a chemical approved by the Director-General (reg. 4)</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–3 (spa 3–5)</td><td class="num">7.2–7.8</td><td>NEA</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#hk">Hong Kong</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1–3</td><td class="num">7.2–7.8</td><td>FEHD</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#jp">Japan</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.4, ≤1.0 desirable</td><td class="num">5.8–8.6</td><td>Hokenjo (prefecture)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#cn">China</a></td><td><span class="chip c-none">Not required (no CCC)</span></td><td><span class="chip p-clause">Clause</span><div class="trig"><b>Conditional:</b> 消毒产品 evaluation and filing if any disinfection claim is made</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.3–1.0</td><td class="num">7.0–7.8</td><td>County health commission</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#kr">South Korea</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">0.4–1.0</td><td class="num">5.8–8.6</td><td>City/county office</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#sea">Thailand · Malaysia · Indonesia · Philippines · Vietnam</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">0.5–3.0 by country</td><td class="num">7.0–7.8</td><td>Local authority / health office</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#in">India</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">0.2 outlet – 0.5 inlet (IS 3328)</td><td class="num">7.5–8.5</td><td>Police / municipal licence</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#islands">Maldives · Fiji · French Polynesia</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">WHO 1–3</td><td class="num">7.2–7.8</td><td>Tourism / health ministry</td><td><span class="conf">INFERRED</span></td></tr>
+
+      <tr class="region"><td colspan="8">Latin America</td></tr>
+      <tr><td class="j"><a href="#br">Brazil</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">ANVISA registers chemicals only</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">0.8–3.0 (NBR); 0.5–0.8 (SP code)</td><td class="num">7.2–7.8</td><td>Vigilância Sanitária</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="j"><a href="#ar">Argentina</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig"><b>Conditional:</b> CABA habilitación lists approved water-treatment equipment; file an addendum</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.4–0.6 total (CABA)</td><td class="num">7.2–7.8</td><td>AGC (CABA) / municipal</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#cl">Chile</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Disinfectant must be chlorine or SEREMI-approved (Art. 15)</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.5–1.5</td><td class="num">7.2–8.2</td><td>SEREMI de Salud</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#co">Colombia</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span><div class="trig">INVIMA registers chemical disinfectants only</div></td><td><span class="chip g-none">None needed</span></td><td class="num">1–3</td><td class="num">7.0–8.0</td><td>Secretaría de Salud</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#pe">Peru</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.4–1.2</td><td class="num">6.5–8.5</td><td>DIRESA / DIGESA</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#cr">Costa Rica</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span><div class="trig">Non-residual disinfection must be paired with a residual product</div></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.2–3 (2–3 with bathers)</td><td class="num">6.8–8.0</td><td>Área Rectora de Salud</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#uy">Uruguay</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-closed">Closed list</span><div class="trig"><b>Conditional:</b> "any other method of water hygiene" needs Servicio de Salubridad approval (D.3649)</div></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.4–0.6</td><td class="num">7.0–8.0</td><td>Servicio de Salubridad</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="j"><a href="#latam-rest">Panama · Ecuador · Guatemala</a></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">WHO 1–3</td><td class="num">7.2–7.8</td><td>MINSA / ARCSA / MSPAS</td><td><span class="conf">MIXED</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="us-states">
+  <div class="sechead"><h2>United States · state by state</h2><p>All 50 states and the District of Columbia. Eleven states have full cards above; the rest are recorded here with the governing rule and its source. Free chlorine in mg/L.</p></div>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>State</th><th>Regulation and key rule</th><th>Product certification</th><th>Process approval</th><th>Permission to install</th><th>FC</th><th>pH</th><th>Authority</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr id="us-al"><td class="st">Alabama</td><td>No statewide code; county rules in 7 of 67 counties (Baldwin Ch. 499-05-01, Jefferson, Shelby, Mobile, Madison) <a href="https://www.alabamapublichealth.gov/baldwin/assets/poolrules.pdf">source</a><div class="rule">Baldwin §2.2: permit and plan approval before changes to equipment on an existing pool; §5.C circulation equipment per NSF Standard 50; §8 feeders per ANSI/NSF-50. Other counties have their own texts.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>County health departments</td><td><span class="conf">VERIFIED (Baldwin)</span></td></tr>
+      <tr id="us-ak"><td class="st">Alaska</td><td>18 AAC 30 Art. 5 (§§30.500–.590) with §30.950 plan review <a href="https://www.law.cornell.edu/regulations/alaska/18-AAC-30.510">source</a><div class="rule">Plan review only when constructed or extensively remodeled (≥25% of taxable value). NSF 50 cited only for DE filters (30.510(m)). 30.540(c) non-chlorine disinfectants by waiver. 30.550(g) free chlorine to give HOCl yield ≥0.3 mg/L; no pool pH limit. Anchorage enforces its own AMC 16.15.</div></td><td><span class="chip c-none">Advised (indirect)</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-none">None needed</span></td><td class="num">≥0.3 (HOCl)</td><td class="num">—</td><td>Alaska DEC Environmental Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-az">Arizona</a></td><td>Maricopa County Environmental Health Code Ch. VI (county-administered)<div class="rule">Sec. 4 Reg. 3(c) circulation components per ANSI/NSF 50; Reg. 7(a) disinfection by approved methods; equipment-change review letter.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>County (Maricopa, Pima)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ar"><td class="st">Arkansas</td><td>Rules Pertaining to Swimming Pools and Other Related Facilities (2012) <a href="https://healthy.arkansas.gov/wp-content/uploads/SwimmingPools1.pdf">source</a><div class="rule">§V.A plans to ADH before any alteration; alteration includes replacing any portion of the recirculation system. §IX.A all system components meet NSF Standard 50 and bear the seal. <b>Conditional:</b> §XXV any "alternative equipment, product or material" needs ADH written acceptance (submit NSF data and cut sheets) regardless of disinfection status.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–5.0</td><td class="num">7.0–7.8</td><td>Arkansas Dept. of Health, Plan Review</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-ca">California</a></td><td>CBC Title 24 Ch. 31B; 22 CCR §65529<div class="rule">§3123B.2 "supplemental equipment" per NSF/ANSI 50; §3103B.1 plan review before altering equipment.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (≥2.0 w/ CYA)</td><td class="num">7.2–8.0</td><td>County Environmental Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-co">Colorado</a></td><td>5 CCR 1003-5<div class="rule">"Standards of the NSF" for feeders, filters, skimmers; 30-day Article II plan submittal for modification.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.25–5.0</td><td class="num">7.2–8.0</td><td>CDPHE / county</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ct"><td class="st">Connecticut</td><td>Conn. Agencies Regs. §19-13-B33b; CT Public Swimming Pool Design Guide (2021) <a href="https://eregulations.ct.gov/eRegsPortal/Browse/RCSA/Title_19Subtitle_19-13Section_19-13-b33b/">source</a><div class="rule">(b)(1) no substantial alteration or reconstruction without commissioner-approved sealed plans; (b)(5) chemical feeders per NSF, other disinfecting methods only if demonstrated to the commissioner; Cl ≥0.8 (≥1.5 with CYA); (b)(6) pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.8</td><td class="num">7.2–7.8</td><td>CT Dept. of Public Health; local director of health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-de"><td class="st">Delaware</td><td>16 Del. Admin. Code 4464 <a href="https://regulations.delaware.gov/AdminCode/title16/4464">source</a><div class="rule">§3.4.1 Approval to Construct before installing or altering pool equipment; §3.4.1.10 and §7.1.1 NSF listing required; §8.6.10 secondary systems NSF 50; §8.6.8.1 FAC ≥1.0 (2.0 with CYA), 10 recommended max; §8.5.1.1 pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>DE Division of Public Health, Office of Engineering</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-dc"><td class="st">District of Columbia</td><td>25-C DCMR (2017), MAHC 2nd ed. adopted <a href="https://dchealth.dc.gov/sites/default/files/dc/sites/doh/publication/attachments/2017-%2025C%20DCMR-DC%20Swimming%20Pool,%20Spa%20and%20Saunas_0.pdf">source</a><div class="rule">"Alteration" expressly includes equipment changes and changes in recirculation or treatment systems; §706.1 plans to DC Health 30 days before retrofit; §408.2 treatment equipment per NSF/ANSI 50; §404.2 FAC 1–10 (indoor max 5), pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-closed">Closed list</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>DC Health; DOB building permit</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-fl">Florida</a></td><td>FBC §454.1; F.A.C. 64E-9<div class="rule">§454.1.6.5.1 NSF/ANSI 50; §454.1.6.5.6 NSF-pw pipe marking; local building permit; DOH plan review repealed 2016.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1–10 (indoor ≤5)</td><td class="num">7.0–7.8</td><td>Local building dept + DOH</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-ga">Georgia</a></td><td>Rule 511-3-5<div class="rule">.04(9)(c) NSF 50 with engineer letter; .03(2)(a) 30-day plan submittal for alteration.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0</td><td class="num">7.2–7.8</td><td>County Board of Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-hi">Hawaii</a></td><td>HAR 11-10<div class="rule">No NSF reference; 11-10-3 renovation plans to the Director; 11-10-15 alternative disinfectants by acceptance.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.6</td><td class="num">7.2–7.8</td><td>State DOH Sanitation Branch</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-id"><td class="st">Idaho</td><td>None statewide since 1 July 2025 (HB 202 repealed DHW authority; IDAPA 16.02.14 lapsed) <a href="https://legislature.idaho.gov/sessioninfo/2025/legislation/H0202/">source</a><div class="rule">District health inspections stopped 1 July 2025. Regulation now only by city or county ordinance; many re-adopt the old IDAPA text (district plan approval for alteration, no NSF clause). Check the local ordinance for each property.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">—</td><td class="num">—</td><td>City or county ordinance</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-il">Illinois</a></td><td>77 IAC 820<div class="rule">820.210 NSF 50 by an ANSI-accredited agency; 820.100 "major alteration" permit via prequalified PE.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–4.0</td><td class="num">7.2–7.6</td><td>IDPH</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-in"><td class="st">Indiana</td><td>410 IAC 6-2.1 (IDOH) + 675 IAC 20-2 (Indiana Swimming Pool Code) <a href="https://www.law.cornell.edu/regulations/indiana/675-IAC-20-2-17">source</a><div class="rule">675 IAC 20-2-1 IDHS design release before construction, rehabilitation or alteration; 20-2-17 circulation equipment within NSF/ANSI 50 scope must conform and bear the seal; 410 IAC 6-2.1-30 FC 1.0–7.0, pH 7.2–7.8, alternative disinfectants only if accepted.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–7.0</td><td class="num">7.2–7.8</td><td>IDHS (design release) + IDOH / local health dept.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ia"><td class="st">Iowa</td><td>641 IAC Ch. 15 <a href="https://www.law.cornell.edu/regulations/iowa/Iowa-Code-r-641-15.5">source</a><div class="rule">15.5(1) department permit before a pool is constructed or reconstructed; 15.5(2)(a) engineered plans may be waived for feeder or simple pump/filter swaps; 15.5(5)–(12) pumps, filters, skimmers and feeders NSF 50 listed; 15.4(2) FC 1.0–8.0, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–8.0</td><td class="num">7.2–7.8</td><td>Iowa HHS Swimming Pool &amp; Spa Program</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ks"><td class="st">Kansas</td><td>None statewide; local ordinances (Johnson County Aquatic Health Code 2025, Sedgwick, Wyandotte) <a href="https://kdhe.ks.gov/DocumentCenter/View/14669/Recreational-Water-Guidelines-PDF">source</a><div class="rule">KDHE: no statewide rules for construction, operation, filtration or disinfection of public pools and no operator licensing. <b>Conditional:</b> Johnson County asks operators to notify its Environment Division of any change to the pool or pumps; other counties vary and some have no code.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">—</td><td class="num">—</td><td>City or county health departments</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ky"><td class="st">Kentucky</td><td>902 KAR 10:120 (operations) and 902 KAR 10:123 (construction) <a href="https://apps.legislature.ky.gov/law/kar/titles/902/010/123/">source</a><div class="rule">10:123 §2(1) no alteration or reconstruction without written plan approval; §2(12) any change in equipment needs written cabinet approval; §7(1)(c) "all pool equipment systems shall be certified to NSF or ANSI 50 standards"; §7(1)(b) NSF-pw mark; 10:120 FC 1–5, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>KY Dept. for Public Health; local health depts.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-la"><td class="st">Louisiana</td><td>LAC Title 51 Part XXIV <a href="https://www.law.cornell.edu/regulations/louisiana/La-Admin-Code-tit-51-SS-XXIV-103">source</a><div class="rule">§103 no major alteration to an existing pool without prior written approval of the state health officer; §501 circulation equipment per NSF Standard 50; §903.B innovative disinfection at the officer's discretion; §905 FC 0.4–0.6 in the current text (operators commonly maintain 1–3), pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.4–0.6 (text)</td><td class="num">7.2–7.8</td><td>Louisiana Dept. of Health, state health officer</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-me"><td class="st">Maine</td><td>10-144 CMR Ch. 202 (2010) <a href="https://www.maine.gov/dhhs/mecdc/sites/maine.gov.dhhs.mecdc/files/rules/Pool%20&%20Spa%20Rules%209-1-2010.pdf">source</a><div class="rule">§2(B)(1) no changes to an existing pool or its appurtenances until plans are approved by the Department; §3(C) water sanitized by an Appendix A sanitizer (Cl 1.0–3.0, max 4.0); NSF 50 enters only through the incorporated ANSI/NSPI-1 design standard.</div></td><td><span class="chip c-none">Advised (indirect)</span></td><td><span class="chip p-closed">Closed list</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–4.0</td><td class="num">7.2–7.8</td><td>Maine CDC Health Inspection Program</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-md"><td class="st">Maryland</td><td>COMAR 10.17.01 (amended 2020) <a href="https://health.maryland.gov/regs/Documents/10.17.01.pdf">source</a><div class="rule">.06 construction permit before altering a pool; .05B(1) "alter" includes adding a component not in the original system; .26A circulation components including "other pool and spa equipment" per ANSI/NSF 50; .26B any ANSI-accredited certifier accepted; .44A Cl 1.5–10; .45A pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-closed">Closed list</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.5–10</td><td class="num">7.2–7.8</td><td>County health officer (delegated by MDH)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ma"><td class="st">Massachusetts</td><td>105 CMR 435.000 <a href="https://www.law.cornell.edu/regulations/massachusetts/105-CMR-435-02">source</a><div class="rule">435.02(1) written Board of Health approval of PE-stamped plans before any change that may affect compliance of an existing pool; 435.06(3) NSF cited for filter rates only; 435.29 Cl 1.0–3.0, pH 7.2–7.8; other EPA-registered disinfectants only with BOH approval.</div></td><td><span class="chip c-none">Advised (indirect)</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–3.0</td><td class="num">7.2–7.8</td><td>Local Board of Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-mi"><td class="st">Michigan</td><td>Mich. Admin. Code R 325.2111–.2199; MCL 333.12521–.12528 <a href="https://www.law.cornell.edu/regulations/michigan/Mich-Admin-Code-R-325-2113">source</a><div class="rule">R 325.2113 construction permit for any "modification" of an existing pool regardless of cost (PE seal above $15,000); no NSF requirement for filters or feeders; R 325.2156 covers chemicals only; Table 3 FC ≥1 at pH 7.2–7.5, ≥2 at pH 7.5–8.0.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0 (≥2.0 at pH &gt;7.5)</td><td class="num">7.2–8.0</td><td>EGLE Drinking Water &amp; Environmental Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-mn"><td class="st">Minnesota</td><td>Minn. Rules 4717.0150–4717.3975 <a href="https://www.revisor.mn.gov/rules/4717/full">source</a><div class="rule">4717.0450 no public pool constructed, installed or materially altered until plans are approved by the commissioner; 4717.2570 equipment installed in or altering a recirculation system must meet NSF 50; 4717.1750 chlorine, bromine or other halogens, FC 1.0–10, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-closed">Closed list</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>Minnesota Dept. of Health</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ms"><td class="st">Mississippi</td><td>None; MSDH Swimming Pool &amp; Spa Sanitation Guidelines (advisory) <a href="https://msdh.ms.gov/page/resources/144.pdf">source</a><div class="rule">"The Mississippi State Department of Health does not regulate swimming pools and spas. No permits are required"; recommendations only (FC 1–3, pH 7.2–7.8) with the CDC MAHC linked as guidance. Local building officials apply the ISPSC where adopted.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-none">None needed</span></td><td class="num">1–3 (advisory)</td><td class="num">7.2–7.8</td><td>None at state level</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-mo"><td class="st">Missouri</td><td>19 CSR 20-3.020 and 19 CSR 20-3.050; local ordinances govern in practice <a href="https://www.law.cornell.edu/regulations/missouri/19-CSR-20-3-020">source</a><div class="rule">20-3.020(4) written DHSS approval of plans before alterations, changes or additions to an existing public bathing place; no equipment standard; 20-3.050 (lodging pools) FC ≥1.0, pH 7.2–7.8, alternative disinfectants by approval. St. Louis County and Kansas City run their own codes.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0</td><td class="num">7.2–7.8</td><td>Missouri DHSS on paper; county and city health depts.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-mt"><td class="st">Montana</td><td>ARM 37.115 with DPHHS Circular FCS 3-2022 (adopts ISPSC) <a href="https://dphhs.mt.gov/assets/publichealth/FCS/PublicSwimmingPools/CircularFCS_3_2022.pdf">source</a><div class="rule">§3.1.1(b) plans to DPHHS 30 days before installing equipment "not identical or substantially similar or new to the design"; ISPSC §309.2 NSF 50; Table 2 FC 1–10 (2–10 stabilized), pH 7.2–7.8. <b>Conditional:</b> §2.3.2 any secondary or supplemental disinfection system must be NSF-approved and department-approved.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>MT DPHHS Food &amp; Consumer Safety + local building official</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ne"><td class="st">Nebraska</td><td>178 NAC 2 <a href="https://www.law.cornell.edu/regulations/nebraska/178-Neb-Admin-Code-ch-2-SS-005">source</a><div class="rule">2-003 written Department approval of plans before construction, modification or improvement; 003.03 exempts only like-for-like replacements; 2-005.11(A) recirculation components certified to ANSI/NSF 50; 2-007.02 FC ≥2.0 as published, close above 10, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">2.0–10</td><td class="num">7.2–7.8</td><td>Nebraska DWEE Swimming Pool Program</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-nv">Nevada</a></td><td>NAC 444; Clark County Pool &amp; Spa Code 2018; SNHD Aquatic Facility Regulations<div class="rule">§309.2 NSF 50; SNHD reviews equipment alterations.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>SNHD / Washoe</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-nh"><td class="st">New Hampshire</td><td>Env-Wq 1100 (Public Bathing Places) <a href="https://gc.nh.gov/rules/state_agencies/env-wq1100.html">source</a><div class="rule">1103.01(a) prior NHDES approval of construction, design and physical specifications; 1105.22(a) any component installed after 2014 certified by NSF "or a comparable independent testing organization" to NSF/ANSI 50; 1106.08(b) enumerated disinfection methods; 1105.13 FAC 1–5, pH 7.0–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-closed">Closed list</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–5.0</td><td class="num">7.0–7.8</td><td>NH Dept. of Environmental Services</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-nj"><td class="st">New Jersey</td><td>N.J.A.C. 8:26 (Public Recreational Bathing) <a href="https://nj.gov/health/ceohs/documents/phss/recbathing.pdf">source</a><div class="rule">8:26-2.3 written approval of the local health authority before any alteration; 8:26-1.3 "alter" means any modification of equipment or change of water-flow pattern (normal maintenance and like-for-like excluded); no NSF 50 language; App. C Cl 1.0–10, pH 7.2–7.8.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>Local health authority + construction code official</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-nm"><td class="st">New Mexico</td><td>7.18.1 NMAC, adopting the CDC MAHC 1st ed. by reference <a href="https://www.srca.nm.gov/parts/title07/07.018.0001.html">source</a><div class="rule">7.18.1.12.J non-substantial alteration needs no permit but the owner "shall contact the department to review proposed changes prior to starting"; 12.A permit for substantial alteration; MAHC §5.7.3 FC 1–10, pH 7.2–7.8. <b>Conditional:</b> MAHC §4.7.3.4 supplemental treatment systems must be NSF/ANSI 50 listed.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>NMED Environmental Health Bureau (Albuquerque separate)</td><td><span class="conf">SECONDARY</span></td></tr>
+      <tr><td class="st"><a href="#us-ny">New York</a></td><td>10 NYCRR Subpart 6-1<div class="rule">6-1.29 item 9.1 NSF "or another testing laboratory"; names water-conditioning equipment; PE addendum for modification.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">≥0.6, ≤5.0</td><td class="num">≤7.8</td><td>County health department</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-nc"><td class="st">North Carolina</td><td>15A NCAC 18A .2500 <a href="https://ehs.dph.ncdhhs.gov/docs/rules/RulesGoverningPublicSwimmingPools.2500.pdf">source</a><div class="rule">.2537(b) equipment replacement must comply with .2514–.2534 and be approved by the Department prior to installation (repairs exempt); .2518, .2519, .2530 pumps, filters, skimmers, feeders per NSF/ANSI 50; .2535 FC ≥1, pH 7.2–7.8, disinfection by an EPA-registered process.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0</td><td class="num">7.2–7.8</td><td>NC DHHS Environmental Health via local health dept.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-nd"><td class="st">North Dakota</td><td>NDAC 33-29-01 (1985, skeletal); local codes (Bismarck Title 4) <a href="https://ndlegis.gov/information/acdata/pdf/33-29-01.pdf">source</a><div class="rule">33-29-01-07 disinfection by continuous chlorination "or other means of equal bactericidal efficiency", FC ≥1 mg/L at all times; no NSF, plan-approval or alteration language; 33-29-01-12 stricter local ordinances control.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-none">None needed</span></td><td class="num">≥1.0</td><td class="num">—</td><td>ND HHS + local public health units</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-oh"><td class="st">Ohio</td><td>OAC 3701-31 <a href="https://www.law.cornell.edu/regulations/ohio/Ohio-Admin-Code-3701-31-05">source</a><div class="rule">3701-31-05(A) no substantial alteration until plans are approved by the director; (C) substantial alteration includes changes affecting circulation systems (like-for-like within 10% exempt); 3701-31-05.1(F)(12)(e) skimmers, filters, feeders NSF-listed; 3701-31-04(D)(4) secondary disinfection needs approval; FC ≥1.0, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.0</td><td class="num">7.2–7.8</td><td>Ohio Dept. of Health / local licensor</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ok"><td class="st">Oklahoma</td><td>OAC 310:315 and 310:320 <a href="https://www.law.cornell.edu/regulations/oklahoma/OAC-310-315-3-1">source</a><div class="rule">310:315-3-1(b) minor changes or additions to an existing bathing place need a written scope of work to the Department (informal review); major remodel needs PE-sealed plans; 7-16 feeders NSF-listed, 7-14(l) skimmers NSF 50; 310:320 FC 1–5, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>Oklahoma State Dept. of Health (Tulsa, OKC-County locally)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-or"><td class="st">Oregon</td><td>OAR 333-060-1000 and 333-062-1000 (MAHC-based, eff. 1 Apr 2025) <a href="https://www.oregon.gov/oha/PH/HEALTHYENVIRONMENTS/RECREATION/POOLSLODGING/Documents/OAR%20333-060-1000.pdf">source</a><div class="rule">§4.1.3.2.1 for a non-substantial alteration the owner "shall contact the AHJ to review proposed changes prior to starting"; §4.1.3.3 replacement equipment needs written equivalency approval; §5.7.3.1.1.2 FC 1.0 (2.0 with CYA)–10, pH 7.0–7.8. <b>Conditional:</b> §5.7.3.3 supplemental treatment must be NSF/ANSI 50 listed and EPA-registered if a pesticide.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–10</td><td class="num">7.0–7.8</td><td>OHA Public Health or county Local Public Health Authority</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-pa"><td class="st">Pennsylvania</td><td>28 Pa. Code Ch. 18; construction via UCC (ISPSC 2018) <a href="https://www.pacodeandbulletin.gov/Display/pacode?file=%2Fsecure%2Fpacode%2Fdata%2F028%2Fchapter18%2Fchap18toc.html">source</a><div class="rule">§18.15 additions and alterations only on permit; §18.29 Cl ≥0.4, pH 7.2–8.2, other disinfecting methods only after approval; no NSF language. <b>Conditional:</b> §18.7 "a treatment process or protective measure may not be added to, altered or discontinued without securing appropriate approval"; present the device as a certified circulation component, never as water treatment.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.4</td><td class="num">7.2–8.2</td><td>PA Dept. of Health; county/municipal health depts.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ri"><td class="st">Rhode Island</td><td>216-RICR-50-05-4 (Licensing Aquatic Venues), 2018 MAHC incorporated <a href="https://rules.sos.ri.gov/regulations/part/216-50-05-4">source</a><div class="rule">§4.1.3 incorporates the 2018 MAHC and NSF/ANSI 50; §4.4(B) no construction or alteration without RIDOH preliminary approval, and any change to water treatment or hydraulics is a "substantial alteration" regardless of cost; §4.6.2(B)(7) Cl 1.0–10, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>RI Dept. of Health, Licensed Swimming Pools Program</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-sc"><td class="st">South Carolina</td><td>S.C. Code Regs. R.61-51 <a href="https://www.des.sc.gov/sites/des/files/Library/Regulations/R.61-51.pdf">source</a><div class="rule">B.2 no pool constructed or altered until a permit to construct is issued; A.1 "alteration" is any change in equipment; B.5(b) Change Order Request for existing pools; C.33 equipment approved by NSF "or other laboratories acceptable to the Department"; J.14(b) FC 1–8, pH 7.0–7.8. <b>Conditional:</b> C.21 supplemental water treatment systems approved case by case.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–8.0</td><td class="num">7.0–7.8</td><td>SC Dept. of Environmental Services, Recreational Waters</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-sd"><td class="st">South Dakota</td><td>ARSD 44:02:02:22, 44:02:05:15, 44:02:14:11 incorporating the 1996 GLUMRB pool standards <a href="https://doh.sd.gov/media/q1cligob/standardsforswimmingpooldesign.pdf">source</a><div class="rule">Standards §2.1.3 plans for modifications to the reviewing authority; §9.0.1 recirculation components per NSF/ANSI 50; FC ≥0.5 at pH 7.2 (≥1.0 with cyanurate). Applies to lodging, resort and campground pools; municipal pools not tied to lodging are unregulated at state level.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.5</td><td class="num">7.2–7.8</td><td>SD Dept. of Health, Office of Health Protection</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-tn"><td class="st">Tennessee</td><td>Tenn. Comp. R. &amp; Regs. 1200-23-05 (rev. Sept 2024) <a href="https://www.law.cornell.edu/regulations/tennessee/Tenn-Comp-R-Regs-1200-23-05-.03">source</a><div class="rule">.03(2)(a) no alteration or reconstruction without plan approval; .01 "alter" includes installing or removing equipment; .03(n)(6) filters per NSF (NSF 50 not named for other gear); .02(4)(c) FC 0.5–3.0, pH 7.2–7.6, other methods if demonstrated.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">0.5–3.0</td><td class="num">7.2–7.6</td><td>TN Dept. of Health; county health depts.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-tx">Texas</a></td><td>25 TAC Ch. 265 Subch. L<div class="rule">§265.189 NSF 50; avoid "supplemental treatment system" classification (FIFRA); local building permit per ISPSC.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–8.0</td><td class="num">7.2–7.8</td><td>DSHS + local authority</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-ut"><td class="st">Utah</td><td>Utah Admin. Code R392-302 <a href="https://www.law.cornell.edu/regulations/utah/Utah-Admin-Code-R392-302-5">source</a><div class="rule">R392-302-5(1) plans to the local health department for "a modification project of an existing pool, or replacement of equipment that is different from that originally approved"; the local health officer may exempt if no adverse effect; -19/-23/-24 circulation equipment, filters, feeders NSF/ANSI 50; -25 FC 1.0 (2.0 stabilized)–10, pH 7.2–7.8.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>Local health department</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-vt"><td class="st">Vermont</td><td>Licensed Lodging Establishment Rule §18 (lodging pools only) <a href="https://www.healthvermont.gov/sites/default/files/document/reg-lodging-establishment.pdf">source</a><div class="rule">No statewide public-pool code; only pools at licensed lodging are regulated. §5.3 plan review only before new construction or significant renovation; §18.5.1.1 FAC 1.0–5.0; §18.5.2 pH 7.0–8.0; §18.5.1.3 non-chlorine disinfection must be shown equivalent. VDH recommends the MAHC but has not adopted it.</div></td><td><span class="chip c-none">Not required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-none">None needed</span></td><td class="num">1.0–5.0</td><td class="num">7.0–8.0</td><td>Vermont Dept. of Health Food &amp; Lodging (lodging pools)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-va"><td class="st">Virginia</td><td>12VAC5-460 (tourist establishment pools); USBC 13VAC5-63 adopting ISPSC 2021 <a href="https://law.lis.virginia.gov/admincodefull/title12/agency5/chapter460/">source</a><div class="rule">-30(A) pools opened after remodeling or major alteration need plans to the local health dept. and written Commissioner approval; -250 chlorine feeders required, other methods by approval; -280 FC ≥0.5; -290 pH ≥7.2. NSF 50 enters through USBC/ISPSC §§302.3, 309.2 (listed and labeled) for all public pools.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥0.5</td><td class="num">≥7.2</td><td>VDH via local health dept.; local building official</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr><td class="st"><a href="#us-wa">Washington</a></td><td>WAC 246-260<div class="rule">246-260-021 construction permit for alteration; NSF 50 for disinfection equipment.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-silent">Silent</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">≥1.5, ≤10</td><td class="num">7.2–8.0</td><td>Local health officer</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-wv"><td class="st">West Virginia</td><td>64CSR16 Recreational Water Facilities <a href="https://www.law.cornell.edu/regulations/west-virginia/agency-64/title-64/series-64-16">source</a><div class="rule">§3.1 no person may establish, construct or renovate a facility without a construction permit (four plan sets 45 days ahead); §6.1 incorporates ANSI/NSPI-1 2003 (NSF 50 indirectly); §7.1.d FC 1–5; §7.4.a pH 7.2–7.8; §7.1.f other disinfectants need approval and EPA registration.</div></td><td><span class="chip c-none">Advised (indirect)</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–5.0</td><td class="num">7.2–7.8</td><td>WV Bureau for Public Health; local health depts.</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-wi"><td class="st">Wisconsin</td><td>ATCP 76 (eff. 24 Sep 2023) + SPS 390 (DSPS plan review) <a href="https://docs.legis.wisconsin.gov/document/administrativecode/ATCP%2076.15">source</a><div class="rule">ATCP 76.04(2) operator submits pool modification plans to DSPS under SPS 390, which requires written approval of all changes prior to installation; Table A FC ≥1.0 (2.0 with stabilizer), max 10, pH 7.2–7.8. <b>Conditional:</b> ATCP 76.15(4) technologies that "inactivate or kill pathogens" must be NSF 50 certified and EPA-registered.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-approve">Approval required</span></td><td class="num">1.0–10</td><td class="num">7.2–7.8</td><td>Wisconsin DSPS (plans) + DATCP (licence)</td><td><span class="conf">VERIFIED</span></td></tr>
+      <tr id="us-wy"><td class="st">Wyoming</td><td>Wyoming Dept. of Agriculture Rules for Public Swimming Pools, Spas &amp; Aquatic Facilities, Ch. 1–7 <a href="https://agriculture.wy.gov/corecode/uploads/document6/uploaded_pdfs/corecode/All%20Chapters%201-7%20Rules%20for%20Public%20Swimming%20Pools,%20Spas,%20&%20Aquatic%20Facilities%20_1758.pdf">source</a><div class="rule">Ch. 2 §5(a)(iii) plans before remodeling only "if the regulatory authority determines that plans and specifications are necessary"; Ch. 3 pumps and filters per NSF-50; Ch. 5 §1 FC 1.0–8.0 (ideal 2–3), pH 7.0–7.8. <b>Conditional:</b> Ch. 4 §5 an "ancillary non-chlorine sanitizer" must be EPA-registered.</div></td><td><span class="chip c-req">NSF 50 required</span></td><td><span class="chip p-clause">Clause</span></td><td><span class="chip g-notify">Notify authority</span></td><td class="num">1.0–8.0</td><td class="num">7.0–7.8</td><td>Wyoming Dept. of Agriculture, Consumer Health Services</td><td><span class="conf">VERIFIED</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:90ch">Pattern across the 51: written approval or plan review before altering an existing public pool is the rule in 35 states and DC; a notice or scope-of-work suffices in nine (AZ, FL, NY, TX, HI, OK, OR, WY, NM); six have no state requirement at all (AK, ID, KS, MS, ND, VT), where the city or county ordinance governs. NSF/ANSI 50 is named by 37 jurisdictions and reached indirectly through an incorporated design standard in four more; wherever it applies, any ANSI-accredited certifier is accepted, and Maryland and New Hampshire say so expressly.</p>
+</section>
+
+<div class="controls" id="controls">
+  <input type="search" id="q" placeholder="Search jurisdictions, codes, agencies…" aria-label="Search jurisdiction cards">
+  <div class="filters" role="group" aria-label="Filter by permission to install">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="approve" aria-pressed="false">Approval required</button>
+    <button type="button" data-f="notify" aria-pressed="false">Notify authority</button>
+    <button type="button" data-f="none" aria-pressed="false">None needed</button>
+    <button type="button" data-f="req" aria-pressed="false">NSF 50 required</button>
+  </div>
+  <span class="count" id="count"></span>
+  <nav class="jump" aria-label="Jump to region"><a href="#r-na">North America</a><a href="#r-eu">Europe</a><a href="#r-mea">Middle East &amp; Africa</a><a href="#r-apac">Asia-Pacific</a><a href="#r-latam">Latin America</a><a href="#us-states">US states</a><a href="#rules">Principles</a></nav>
+</div>
+
+<!-- ============ NORTH AMERICA ============ -->
+<section id="r-na">
+  <div class="sechead"><h2>North America</h2><p>The only region where NSF/ANSI 50 is written into law. Every code cites the standard, not NSF-the-company, so the IAPMO R&amp;T certificate is accepted wherever the standard is named.</p></div>
+  <div class="cards">
+
+  <article class="card" id="us-fed" data-gate="approve" data-cert="req">
+    <header><h3>United States · federal and model codes</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="chip p-closed">Conditional · EPA FIFRA if any kill/control claim</span><span class="wq">FC ≥1.0 (≥2.0 w/ CYA) · ≤10 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">No federal pool law. 2023/2024 CDC Model Aquatic Health Code (MAHC) §4.7.1.7.1.2.1 requires piping and components "certified, listed and labeled to NSF/ANSI 14, 50 and 61 as applicable" by an ANSI-accredited certifier. ISPSC (ICC) and USPSHTC (IAPMO) reference NSF/ANSI 50 the same way. IAPMO R&amp;T is ANAB-accredited, so the certificate qualifies. <span class="conf">VERIFIED</span></div>
+      <div class="k">Process</div><div class="v">MAHC §4.7.3.4 "Supplemental Treatment Systems" are defined as optional <em>disinfection</em> processes and must be labeled "Does not meet requirements for Secondary Disinfection." §5.7.3.1: only listed primary disinfectants are acceptable. AquaRev is not a disinfectant, so it sits outside both clauses. No pool code names "water conditioning device"; the recognized wording is a certified recirculation-system component. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Materials</div><div class="v">No pressure-equipment approval at pool pressures. NSF 61 and SDWA lead-free do not apply to non-potable loops, but MAHC 4.7.1.7.1.2 wants recirculation materials suitable for potable contact; NSF 372 lead-free helps. Electrical bonding not applicable (all PVC, no metal). <span class="conf">INFERRED</span></div>
+      <div class="k">Install</div><div class="v">MAHC Chapter 4 applies to new builds and "substantial alteration" (over 50% of replacement cost); §4.1.1.5 forbids adding equipment not on approved plans without AHJ approval. Health-department plan review is the norm for recirculation changes in CA, WA, GA, CO, IL, HI; FL and TX route it through the building official. <span class="conf">VERIFIED</span></div>
+      <div class="k">Federal claim rules</div><div class="v">AquaRev makes no pesticidal claim. A device claiming to kill or control bacteria or algae would be regulated as a pesticide device under EPA FIFRA (40 CFR 152.500); AquaRev is not, because it does not disinfect. Under the FTC Act §5 and Green Guides (16 CFR 260), the 41% chlorine-reduction figure is supported by the NSF/ANSI 50 certification test report and is always stated with its test conditions. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev is presented to authorities as an NSF/ANSI/CAN 50-certified recirculation component, not as a disinfectant or secondary treatment system. Every installation is supplied with an authority documentation package: the certification listing (File W-12547), the specification sheet, the 2.6 psi head-loss data, and a statement that free-chlorine and pH targets are unchanged.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-ca" data-gate="approve" data-cert="req">
+    <header><h3>California</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC ≥1.0 (≥2.0 w/ CYA) · pH 7.2–8.0</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">CBC Title 24 Part 2 Ch. 31B §3123B.2: "All pumps, filters, chemical feeders, skimmers and supplemental equipment shall comply with… NSF/ANSI 50." "Supplemental equipment" is the closest category to AquaRev. <span class="conf">VERIFIED</span></div>
+      <div class="k">Process</div><div class="v">Title 22 CCR §65529 lets the enforcing agent accept other disinfecting methods on proof of equivalence; not triggered if chlorine remains the disinfectant. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">§3103B.1: anyone proposing to "construct, renovate or alter a pool… equipment and appurtenances shall submit plans… to the enforcing agent for review and written approval prior to commencing." Enforcing agent is the county Environmental Health office; most run an expedited equipment-change review. <span class="conf">VERIFIED</span></div>
+      <div class="k">Water quality</div><div class="v">§65529: FC ≥1.0 ppm (≥2.0 with cyanuric acid); spas and wading ≥3.0. pH 7.2–8.0. Prop 65 compliant (no listed-chemical exposure). <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">The installer submits an equipment-addition plan-check letter to the county Environmental Health office citing §3123B.2 "supplemental equipment", with the IAPMO listing and hydraulic data. AquaRev provides the letter template and supporting documents.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-fl" data-gate="notify" data-cert="req">
+    <header><h3>Florida</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · NSF-pw marking on recirculation plastics</span><span class="wq">FC 1–10 (indoor ≤5) · spa 2–5 · pH 7.0–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Florida Building Code §454.1.6.5.1: recirculation and treatment equipment "shall be tested and approved using NSF/ANSI 50." DOH 64E-9.004 cites NSF 50 for chemicals only. <span class="conf">VERIFIED</span></div>
+      <div class="k">Materials</div><div class="v">FBC §454.1.6.5.6: plastic pipe in the recirculation system must be imprinted with the manufacturer's name and the NSF-pw potable-water logo. AquaRev's PVC body and unions are NSF/ANSI 372 lead-free; marking for this clause is addressed in the Florida documentation package. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">DOH plan review was repealed in 2016. Construction and modification now run through the local building department under FBC 454.1; DOH issues the operating permit. Whether a union-mounted return-line device is a permit-level "modification" is a local building-official call. Commercial pool work needs a certified pool service technician (64E-9.018). <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">The installer obtains a local building permit or a written waiver, files the FBC 454.1.6.5.1 documentation package, and sends a courtesy notice to the county DOH inspector.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-tx" data-gate="notify" data-cert="req">
+    <header><h3>Texas</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · FIFRA if classed supplemental treatment</span><span class="wq">FC 1.0–8.0 (ideal 2–3) · spa 2.0–8.0 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">25 TAC §265.189: supplemental treatment systems "must meet NSF Standard 50 or 60, have an EPA or FIFRA registration"; secondary systems and feeders "certified, listed and labeled to NSF Standard 50." Standard-based, so IAPMO R&amp;T is accepted. <span class="conf">VERIFIED</span></div>
+      <div class="k">Process</div><div class="v"><b>Note.</b> §265.182(64) defines "supplemental treatment system" broadly as any process "used to enhance overall system performance and improve water quality", and §265.189(b)(3) requires such systems to hold EPA/FIFRA registration, which applies to pesticidal products. AquaRev is a certified circulation component that makes no treatment or pesticidal claim, and is documented to the authority on that basis. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">§265.181 adopts the 2021 ISPSC for alteration and repair; §265.183(b) lets minor alterations to mechanical and plumbing systems proceed under the original construction standard. Local building permit per ISPSC. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev seeks a written determination from the DSHS Pool &amp; Spa program, and from the larger city health departments, that the device is a §265.187 circulation component rather than a §265.189(b) treatment system, and supplies that determination with Texas installations.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-ny" data-gate="notify" data-cert="req">
+    <header><h3>New York</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC ≥0.6 (≥1.5 at pH 7.8–8.2) · ≤5.0 · pH ≤7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">10 NYCRR 6-1.29 item 9.1: equipment "tested and listed by NSF <em>or another testing laboratory</em> under standards promulgated by NSF," or use-tested, or approved by the permit official. Item 9.0 is the only US code that names "water conditioning… equipment" as part of the recirculation system. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">6-1.29 design standards apply to pools "constructed or modified"; plans by a NY-licensed PE or architect to the reviewing authority (county health department; NYC Health Code Art. 165 in the five boroughs). <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">PE-stamped one-page equipment addendum to the county health department citing item 9.1(1).</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-nv" data-gate="approve" data-cert="req">
+    <header><h3>Nevada</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC 1.0–10 · CYA &lt;100 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Clark County Pool &amp; Spa Code 2018 §309.2: treatment and circulation equipment "listed and labeled in accordance with NSF 50." SNHD Aquatic Facility Regulations (2019) are MAHC-based. Statewide NAC 444. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">SNHD plan review explicitly covers "system/equipment alterations to existing venues." Washoe County is a separate AHJ. <span class="conf">SECONDARY</span></div>
+      <div class="k path">In practice</div><div class="v path">The installer files an SNHD equipment-alteration plan-review submittal with the USPC listing before installation.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-az" data-gate="notify" data-cert="req">
+    <header><h3>Arizona</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC 1.0–5.0 (hydrotherapy 3.0–5.0) · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Maricopa County Environmental Health Code Ch. VI Sec. 4 Reg. 3(c): circulation components "shall comply with ANSI/NSF Standard 50." County-administered; Pima runs a parallel code. <span class="conf">VERIFIED</span></div>
+      <div class="k">Process</div><div class="v">Reg. 7(a): disinfection by chlorination "or other methods approved by the Department." Not triggered by a non-disinfectant. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Maricopa Environmental Services equipment-change review letter; replicate for Pima.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-hi" data-gate="notify" data-cert="none">
+    <header><h3>Hawaii</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC ≥0.6 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">HAR 11-10 has no NSF 50 reference; 11-10-15 addresses alternative disinfectants only. The IAPMO listing is supporting evidence, not a legal requirement. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">11-10-3: plans for construction or "renovation" go to the DOH Director for approval before work; 180-day deemed approval. Whether an add-on is a renovation is a DOH Sanitation Branch call. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">A courtesy letter with the listing goes to the DOH Sanitation Branch before installation. The 0.6 mg/L minimum is maintained throughout.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-il" data-gate="approve" data-cert="req">
+    <header><h3>Illinois</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC 1.0–4.0 · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">77 IAC 820.210: equipment "tested in accordance with NSF Standard 50 and listed by an approved certification agency"; 820.10 defines that as any ANSI-accredited body. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">820.100: IDPH construction permit for any "major alteration," defined as any change that alters the facility's "as-built or as-permitted condition." Application must come from an IDPH-prequalified PE or architect. A return-line device plausibly qualifies. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">The operator asks the IDPH Swimming Facility program for a written determination on whether a union-mounted installation is a major alteration; where it is, the application is filed through an IDPH-prequalified engineer.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-ga" data-gate="approve" data-cert="req">
+    <header><h3>Georgia</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC ≥1 (spa ≥3) · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Rule 511-3-5-.04(9)(c): all recirculation and treatment equipment "tested and approved using the current NSF Standard 50," with written evidence from the designing engineer. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">.03(2)(a): plans to the local health authority "at least thirty days prior" when a pool is "constructed, altered, or remodeled." A cut-in on the return line disturbs plumbing, so treat it as an alteration. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">County Environmental Health 30-day plan submittal with the engineer's NSF 50 letter.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-co" data-gate="approve" data-cert="req">
+    <header><h3>Colorado</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC 0.25–5.0 (ideal 1–3) · pH 7.2–8.0</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">5 CCR 1003-5: feeders, filters, skimmers "shall comply in all respects with the standards of the NSF." No certifier named. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Article II: plans "complete with piping layout, equipment and mechanical specifications" at least 30 days before any "remodeling or modification" to CDPHE or the delegated county. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">30-day Article II submittal with piping layout. The 0.25 floor (tied to ORP control) is the lowest in the US.</div>
+    </div>
+  </article>
+
+  <article class="card" id="us-wa" data-gate="approve" data-cert="req">
+    <header><h3>Washington</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-approve">Approval required</span><span class="wq">FC ≥1.5 (spa ≥3.0) · ≤10 · pH 7.2–8.0</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">WAC 246-260-031(17)(a)(iv): disinfection equipment conforming to NSF 50 when the chemical is other than gas chlorine; other components silent. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">246-260-021(1): "Prior to construction, alteration or modification of a WRF pool, except for routine maintenance, an owner shall obtain a construction permit"; decision within 30 days. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Local health construction permit or a written "routine maintenance" determination. Highest FC floor of any US state surveyed.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ca-on" data-gate="approve" data-cert="none">
+    <header><h3>Canada · Ontario</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">FAC 0.5–10 (1.0 w/ CYA) · ORP 600–900 mV · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">NSF/ANSI/CAN 50 is a National Standard of Canada and IAPMO R&amp;T is SCC-accredited, but R.R.O. 1990 Reg. 565 (Public Pools) names no equipment standard. Equipment is governed through the Ontario Building Code and building permits. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">Reg. 565 s.5 (Jan 2025 amendment): at least 14 days before a pool is used "after construction or alteration" the owner must notify the Medical Officer of Health in writing, including the building permit number, and may not reopen "without first obtaining permission in writing." <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Treat the install as an alteration: municipal building permit (or written waiver), 14-day written notice to the Public Health Inspector, written reopening permission.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ca-bc" data-gate="approve" data-cert="none">
+    <header><h3>Canada · British Columbia</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">FAC ≥0.5 (≥1.5 &gt;30 °C) · combined &lt;1 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">B.C. Reg. 296/2010 (Pool Regulation) has no equipment standard; s.11(2)(b) requires maintenance to manufacturer specifications. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">s.1 defines construction to include "repair, renovation and alteration"; s.5(1) requires a construction permit; s.5(6) lets the health officer waive it where the alteration "is so minor that requiring a construction permit is not necessary." <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Request a s.5(6) minor-alteration waiver from the regional health authority (Vancouver Coastal, Fraser, Interior, Island).</div>
+    </div>
+  </article>
+
+  <article class="card" id="ca-ab" data-gate="approve" data-cert="none">
+    <header><h3>Canada · Alberta</h3><span class="chip c-none">Not recorded</span><span class="chip g-approve">Approval required</span><span class="wq">FC ≥1.0 (≥2.0 &gt;30 °C) · CYA ≤50 · pH 6.8–7.6</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Public Swimming Pools Regulation AR 204/2014 plus the 2014/2018 Pool Standards. No NSF 50 requirement is recorded in the regulation; the Pool Standards set operating requirements. <span class="conf">SECONDARY</span></div>
+      <div class="k">Install</div><div class="v">s.8(1)(b): the owner "must apply to the regional health authority for a written approval… before making renovations or alterations to the pool that affect the hydraulic system, disinfection or filtration system." AHS form 19381 exists for this. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Written approval from Alberta Health Services (form 19381) is obtained before installation.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ca-qc" data-gate="none" data-cert="none">
+    <header><h3>Canada · Quebec</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC 0.5–2.0 (close &lt;0.5 / &gt;5.0) · pH 7.0–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Q-2, r. 39 under the Environment Quality Act sets water quality only; no equipment standard found. Amendments in force 2 July 2026; re-verify values. <span class="conf">VERIFIED (summaries)</span></div>
+      <div class="k">Install</div><div class="v">No ministry notification for treatment-system changes found; municipal permit and RBQ contractor licence for building work. French-language documentation required under the Charter of the French Language. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">No pre-approval is required. Documentation is supplied in French. Quebec's 2.0 mg/L maximum is among the tightest in North America, so reducing chlorine demand is of direct operational value.</div>
+    </div>
+  </article>
+
+  <article class="card" id="mx" data-gate="none" data-cert="none">
+    <header><h3>Mexico</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC 1.0–5.0 or ORP &gt;650 mV · pH 6.5–8.5</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">NOM-245-SSA1-2010 covers hotels and tourist developments; clause 5.7 requires circulation and filtration; no equipment certification, NOM or NSF reference. NSF 50 has no legal status; the IAPMO listing is voluntary evidence. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">No sanitary permit for equipment changes; enforcement by COFEPRIS and state COEPRIS. Spanish retail labeling under NOM-050-SCFI-2004 if sold at retail. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">No regulatory requirement applies. Installations are documented against NOM-245 and against the engineering standards of the hotel group, which commonly specify NSF/ANSI 50-certified equipment.</div>
+    </div>
+  </article>
+
+  <article class="card" id="pr" data-gate="notify" data-cert="req">
+    <header><h3>Puerto Rico</h3><span class="chip c-req">NSF 50 required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC 1–5 · CYA ≤100 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Reglamento General de Salud Ambiental Cap. II Art. V Sec. 3.00: recirculation and treatment equipment "deberá cumplir con las disposiciones de la NSF"; plastic pipe must bear the NSF-pw logo. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Secretary may require plans for construction or remodeling; permiso de uso via OGPe and an annual sanitary licence. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">The Florida documentation package is supplied in Spanish, including the pipe-marking statement.</div>
+    </div>
+  </article>
+
+  <article class="card" id="carib" data-gate="approve" data-cert="none">
+    <header><h3>Caribbean</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Varies</span><span class="wq">JM/BB FC ≥0.5 · KY 1–10 · pH 7.2–8.4</span></header>
+    <div class="rows">
+      <div class="k">By territory</div><div class="v"><ul>
+        <li><b>Jamaica</b> — Public Health (Swimming Pools) Regulations 2000: MOH operating permit; FAC ≥0.5, pH 7.5–7.8; only ozone and electrolytic processes need MOH approval. Courtesy notice to the parish MOH. <span class="conf">VERIFIED</span></li>
+        <li><b>Barbados</b> — Health Services (Swimming Pools) Regulations 1970 reg. 4(1): no construction or alteration without plans to and written approval from the Senior Medical Officer of Health; Cl residual 0.5 ppm, pH 7.5–8.4. Approval letter required. <span class="conf">VERIFIED</span></li>
+        <li><b>Cayman Islands</b> — DEH Development Control Guidelines §4.2.1: no pool "installation, alteration or repair" without a DEH permit; FC 1–10 (ideal 2–4), pH 7.2–7.8 (2009 guideline). <span class="conf">VERIFIED</span></li>
+        <li><b>Bahamas</b> — Environmental Health Services Act 1987; no pool-specific regulation located; hotels need a DEHS Certificate of Sanitation. Discretionary, CDC/MAHC norms in practice. <span class="conf">SECONDARY / INFERRED</span></li>
+        <li><b>Turks &amp; Caicos, USVI, Aruba, Dominican Republic</b> — no published pool equipment or chemistry regulation found; Environmental Health / Ministry of Health inspection is discretionary; hotel-brand standards and the NSF 50 listing suffice. <span class="conf">INFERRED</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">Barbados and Cayman need a written approval before install; everywhere else a courtesy letter to the health inspector with the listing.</div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ EUROPE ============ -->
+<section id="r-eu">
+  <div class="sechead"><h2>Europe</h2><p>No product certification exists anywhere; the CE mark is not permitted on this device. The requirements are process and operator-level: national hygiene law, the treatment-process list, and notification to the local health authority.</p></div>
+  <div class="cards">
+
+  <article class="card" id="eu" data-gate="notify" data-cert="none">
+    <header><h3>EU framework</h3><span class="chip c-none">No CE mark</span><span class="chip p-closed">Conditional · Biocidal Products Regulation if any kill claim</span><span class="wq">Applies in DE FR ES IT NL AT PT GR DK SE PL · NO via EEA · CH UK TR by equivalence</span></header>
+    <div class="rows">
+      <div class="k">Pressure</div><div class="v">Pressure Equipment Directive 2014/68/EU Art. 4(1)(c)(ii): Group 2 liquids need conformity assessment only above PS 10 bar, DN 200 and PS×DN 5,000. A DN50–80 PVC device at pool pressure is Art. 4(3) "sound engineering practice": no notified body, and it "shall not bear the CE marking." Below 0.5 bar it is outside PED entirely. <span class="conf">VERIFIED</span></div>
+      <div class="k">Biocides</div><div class="v">Biocidal Products Regulation 528/2012 Art. 3: a biocidal product acts "by any means other than mere physical or mechanical action"; a treated article contains a biocide. A passive device is neither, provided it is never marketed with kill or disinfect claims. <span class="conf">VERIFIED</span></div>
+      <div class="k">Other acts</div><div class="v">General Product Safety Regulation 2023/988 applies only if the same SKU reaches consumers (then: EU responsible person, traceability). Construction Products Regulation: no harmonised EN for pool treatment devices, so no CE route. REACH Art. 33 SVHC statement for PVC. RoHS, LVD, EMC, Machinery: not applicable. Drinking Water Directive materials rules: pool loops excluded. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">EN standards</div><div class="v">EN 15288-1/-2 (public pool design and operation, operator-facing), EN 13451-1/-3 (pool equipment safety), EN 16713 (domestic only). None mandates certification of a passive in-line device; a voluntary EN 13451-1 self-declaration (materials, pressure, marking) is the closest fit. The only European reference to NSF/ANSI 50 found is PWTAG accepting it for UV validation. <span class="conf">SECONDARY</span></div>
+      <div class="k">Claims</div><div class="v">Directive (EU) 2024/825 amending the Unfair Commercial Practices Directive applies from 27 September 2026: generic "green" or "eco" claims are banned; every environmental claim must be specific and substantiated. "41% chlorine reduction, NSF/ANSI 50 certified, under stated test conditions" is the safe form. <span class="conf">SECONDARY</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev maintains a single EU technical file: a PED Art. 4(3) sound-engineering-practice statement, a declaration that the device is not a biocidal product, a REACH Art. 33 statement, and an EN 13451-1 self-declaration. No CE mark is applied, because the Pressure Equipment Directive does not permit one on equipment of this class.</div>
+    </div>
+  </article>
+
+  <article class="card" id="de" data-gate="notify" data-cert="none">
+    <header><h3>Germany</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · Gutachten if treated as DIN 19643 deviation</span><span class="wq">FC 0.3–0.6 (0.7–1.0 warm/whirl) · pH 6.5–7.5</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">§37(2) Infektionsschutzgesetz: pool water treatment "must include disinfection"; §37(3) puts pools under Gesundheitsamt supervision. No federal pool ordinance; Gesundheitsämter apply DIN 19643 as the recognised rules of technology. DIN 19643-2 to -5 define the permitted process combinations (flocculation, filtration, chlorination, with activated carbon, ozone or UV variants). The Umweltbundesamt 2014 recommendation requires a hygienic-technical expert report only where an operator deviates from DIN 19643. <span class="conf">VERIFIED</span></div>
+      <div class="k">Position</div><div class="v">AquaRev adds no process stage and leaves the DIN combination and chlorine regime intact, so it is not a deviation. A Gesundheitsamt may ask for a short Sachverständiger opinion confirming that it does not impair filtration or disinfection. <span class="conf">INFERRED</span></div>
+      <div class="k">Materials</div><div class="v">KTW-BWGL, DVGW W 270 and the Trinkwasserverordnung apply to drinking water, not pool circulation. DIN 19643-1 suitability only. <span class="conf">INFERRED</span></div>
+      <div class="k">Install</div><div class="v">UBA recommendation §4.3: operator informs the Gesundheitsamt of "wesentliche Änderungen" before commissioning. No statutory permit for a return-line component; Länder Bäderrecht may add rules. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev supplies a DIN 19643 non-interference statement and, where requested, an expert opinion from a recognised Sachverständiger. The operator notifies the Gesundheitsamt before commissioning and records bacteriological results for four to eight weeks after installation.</div>
+    </div>
+  </article>
+
+  <article class="card" id="uk" data-gate="none" data-cert="none">
+    <header><h3>United Kingdom</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC 0.5–1.0 target · action &gt;3 · combined ≤0.5 · pH 7.0–7.4</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Pressure Equipment (Safety) Regulations 2016 mirror PED: below threshold, sound engineering practice, no UKCA mark. WRAS and the Water Fittings Regulations apply only to fittings connected to the mains supply; not applicable. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Process</div><div class="v">No statutory standard. HSE HSG179 (2018) defers water treatment to the PWTAG Code of Practice (updated July 2025), the de-facto standard. PWTAG already accepts NSF/ANSI 50 third-party validation for UV systems and requires any process change to be validated by bacteriological results. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">No authority notification. Operator updates the Pool Safety Operating Procedure and risk assessment; the local-authority EHO sees it at inspection. CMA Green Claims Code and the DMCC Act 2024 govern the 41% claim. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev is described as supplementary water conditioning compatible with the PWTAG Code of Practice and validated to NSF/ANSI 50. The operator adds it to the Pool Safety Operating Procedure and continues the Code's bacteriological monitoring.</div>
+    </div>
+  </article>
+
+  <article class="card" id="fr" data-gate="notify" data-cert="none">
+    <header><h3>France</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · ANSES if chloramine or disinfection claim</span><span class="wq">Free active Cl 0.4–1.4 · combined ≤0.6 · CYA ≤75 · pH 6.9–7.7</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Code de la santé publique Art. D.1332-3: treatment products and processes are authorised by ANSES (six-month silence equals acceptance). Arrêté of 7 April 1981 art. 5 (per DGS Instruction 2021/214) limits that to disinfection processes, chlorine stabilisers, and "procédés utilisés pour diminuer le taux de chloramines." A device that does none of these needs no ANSES authorisation. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Note</div><div class="v">A process presented as lowering chloramines or combined chlorine is a "procédé de déchloramination" and requires an ANSES authorisation dossier covering efficacy and safety. In France, AquaRev is therefore presented solely as a hydraulic conditioning device that reduces chlorine consumption; no chloramine-reduction claim is made. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">L.1332-1 declaration to the mairie before opening; the responsible person runs surveillance and the ARS runs the contrôle sanitaire (D.1332-10). Report a treatment-chain change in the ARS file. ACS material approval is drinking-water only. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev is documented as hydraulic conditioning that reduces chlorine consumption while the D.1332-2 limits are maintained. The operator records it in the surveillance file and informs the ARS.</div>
+    </div>
+  </article>
+
+  <article class="card" id="es" data-gate="none" data-cert="none">
+    <header><h3>Spain</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC 0.5–2.0 (close &gt;5) · combined ≤0.6 · pH 7.2–8.0</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Real Decreto 742/2013 art. 6: water filtered and disinfected before entering the vaso; art. 7: biocides must be registered TP2 products, other chemicals REACH-compliant; art. 11: operator's protocolo de autocontrol. No closed list of processes. A passive device is not a biocide. Regional decrees (Andalucía, Cataluña, Madrid) can add requirements. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">Art. 4.1: opening notified to the competent authority; modification reporting is regional. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">AquaRev supplies a statement that the device is not a biocide and does not alter the art. 6 treatment; the operator adds it to the autocontrol protocol and applies any additional requirement of the regional decree.</div>
+    </div>
+  </article>
+
+  <article class="card" id="it" data-gate="notify" data-cert="none">
+    <header><h3>Italy</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free active Cl 0.7–1.5 indoor, 1.0–1.5 outdoor · combined ≤0.4 · pH 6.5–7.5</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Accordo Stato-Regioni 16 Jan 2003 (Tabella A parameters); disinfectants must be Ministero della Salute-authorised; UNI 10637 governs plant design. Regions transpose and require autorizzazione sanitaria or SCIA via Comune and ASL; the operator's manuale di autocontrollo must describe the plant. <span class="conf">SECONDARY / VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Plant modifications generally need an update of the autorizzazione or SCIA file with the ASL, depending on regional law. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">UNI 10637 compatibility statement; operator amends the manuale di autocontrollo and files a comunicazione with the ASL where the region requires it.</div>
+    </div>
+  </article>
+
+  <article class="card" id="nl" data-gate="notify" data-cert="none">
+    <header><h3>Netherlands</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free Cl 0.5–1.5 indoor (≤5.0 outdoor) · bound ≤0.6 · pH 7.0–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Besluit activiteiten leefomgeving §15.2.1 (from 1 Jan 2024, replacing the Bhvbz): goal-based; no list of approved processes; art. 15.14 requires a risicoanalyse and beheersplan showing how art. 15.16 water quality is met. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Art. 15.13: no activity without a melding to Gedeputeerde Staten (executed by the omgevingsdienst) at least four weeks in advance; standard Bal drafting requires a new melding before the activity is carried out differently from the notified data. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator updates the risicoanalyse and beheersplan and files an amended melding with the omgevingsdienst four weeks or more before install. Keurmerk Veilig &amp; Schoon is the industry mark to reference.</div>
+    </div>
+  </article>
+
+  <article class="card" id="at" data-gate="approve" data-cert="none">
+    <header><h3>Austria</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="chip p-closed">Conditional · opinion that device is outside §14 list</span><span class="wq">Free Cl ≥0.3 (pH ≤7.4), ≥0.5 (pH 7.4–7.8) · bound ≤0.3 · pH 6.5–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v"><b>Most restrictive in Europe.</b> Bäderhygieneverordnung 2012 §14 enumerates the permitted process combinations (flocculation–filtration–chlorination; ozone full or partial stream; chlorine–chlorine dioxide; §14a UV as supplement). Bäderhygienegesetz §3 requires an Errichtungsbewilligung from the Bezirksverwaltungsbehörde with hygiene expert opinion; §4 a Betriebsbewilligung after inspection. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">A change to the water-treatment plant of a licensed bath requires an Änderungsanzeige or Änderungsbewilligung with an Amtssachverständiger opinion. ÖNORM M 6215 is the technical reference. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Obtain a written opinion that the device is a hydraulic accessory outside the §14 process definition; operator files an Änderungsanzeige with the BVB before install.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ch" data-gate="none" data-cert="none">
+    <header><h3>Switzerland</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">Free Cl 0.2–0.8 (spa 0.7–1.5) · pH 6.8–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">TBDV SR 817.022.11 Art. 10: only Annex 5a active substances and processes may be used for disinfection (chlorine forms; ozone in combination). Art. 13: treatment plants built, operated and modified to the recognised rules of technology, which means SIA 385/9:2023. A non-disinfecting device is outside Art. 10 and must be consistent with SIA 385/9. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">Enforcement by the cantonal Lebensmittelinspektorat through operator Selbstkontrolle; cantonal building permits vary. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">SIA 385/9 compatibility note; operator records it in the Selbstkontrolle. Lowest FC band in Europe (0.2–0.8).</div>
+    </div>
+  </article>
+
+  <article class="card" id="pt" data-gate="notify" data-cert="none">
+    <header><h3>Portugal</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free active Cl 0.5–1.2 at pH 6.9–7.4 · 1.0–2.0 at pH 7.5–8.0 · CYA ≤75</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">NP EN 15288 adopted; Diretiva CNQ 23/93 formally superseded but still the treatment reference used by the DGS/ARS surveillance programme. §9.14 defines treatment types; isocyanurate products must be homologated. Decreto Regulamentar 5/97 covers water-park safety. <span class="conf">VERIFIED / SECONDARY</span></div>
+      <div class="k">Install</div><div class="v">Programa de Vigilância Sanitária das Piscinas run by ARS and the Delegado de Saúde; hotel pools licensed under tourism law. No explicit modification rule found. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">NP EN 15288 / CNQ 23/93 compatibility note; operator informs the Delegado de Saúde in the PVSP file.</div>
+    </div>
+  </article>
+
+  <article class="card" id="gr" data-gate="notify" data-cert="none">
+    <header><h3>Greece</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Residual Cl ≥0.4 (pref ≤0.7) · pH 7.2–8.2 · turnover ≤4 h</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Health Decree Γ1/443/1973 as amended (Law 4688/2020 for tourist accommodation) Art. 18: continuous chlorination required; any non-chlorine method needs Health Service approval (§3). AquaRev keeps chlorination, so §3 is not engaged. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">The operating licence is now a γνωστοποίηση (notification) via EUGO, including "change of details." File a treatment-chain change as a μεταβολή. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">No approval is required; the operator updates the γνωστοποίηση.</div>
+    </div>
+  </article>
+
+  <article class="card" id="dk" data-gate="approve" data-cert="none">
+    <header><h3>Denmark</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="chip p-closed">Conditional · municipal approval if hygiene materially affected</span><span class="wq">Free Cl 0.4–1.5 indoor · 1.0–2.0 outdoor/spa · bound ≤0.5 · pH 6.8–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">BEK nr. 918 of 27 June 2016 §3: no construction or operation without kommunalbestyrelse approval, and no "bygnings-, anlægs- eller driftsmæssig ændring" affecting hygiene without prior approval (tillægsgodkendelse). Other disinfection principles only by municipal derogation; low-chlorine operation by permit (§4). DS 477 is the norm. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator asks the kommune whether the install is a "væsentlig ændring"; expect a short tillægsgodkendelse letter.</div>
+    </div>
+  </article>
+
+  <article class="card" id="se" data-gate="notify" data-cert="none">
+    <header><h3>Sweden</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free Cl ≥0.4/0.5/0.6 at pH 7.2/7.4/7.6 · bound ≤0.3 · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Miljöbalken Ch. 9; bassängbad are anmälningspliktiga to the municipal board under förordning 1998:899 §38; egenkontroll under 1998:901. HSLF-FS 2021:11 sets guideline values; no process list. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator documents in egenkontroll and informs the miljökontor.</div>
+    </div>
+  </article>
+
+  <article class="card" id="no" data-gate="notify" data-cert="none">
+    <header><h3>Norway</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free Cl ≥0.4 (≤27 °C) to ≥1.0 (&gt;37 °C) · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Forskrift for badeanlegg FOR-1996-06-13-592 §6: melding to the kommune before start and before changes; §11 circulation system; §§15–16 chemistry. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator files a §6 melding for the change.</div>
+    </div>
+  </article>
+
+  <article class="card" id="pl" data-gate="notify" data-cert="none">
+    <header><h3>Poland</h3><span class="chip c-none">PZH atest advised</span><span class="chip g-notify">Notify authority</span><span class="wq">Free Cl 0.3–0.6 (0.7–1.0 hydromassage) · bound ≤0.3 · pH 6.5–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Rozporządzenie Ministra Zdrowia of 9 Nov 2015 (Dz.U. 2022 poz. 1230) Annex 2 sets parameters; §3: manager reports to the Państwowy Powiatowy Inspektor Sanitarny within three working days. No process list. <span class="conf">VERIFIED</span></div>
+      <div class="k">Product</div><div class="v">No legal certification, but Polish operators routinely ask for a voluntary NIZP-PZH hygienic certificate (atest higieniczny) for water-contact products. <span class="conf">INFERRED (market practice)</span></div>
+      <div class="k path">In practice</div><div class="v path">A voluntary NIZP-PZH hygienic certificate is provided for the Polish market; the operator informs the PPIS.</div>
+    </div>
+  </article>
+
+  <article class="card" id="tr" data-gate="none" data-cert="none">
+    <header><h3>Turkey</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">Free Cl 1–1.5 indoor, 1–3 outdoor (0.3–0.6 w/ O₃/UV) · bound ≤0.2 · pH 6.5–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Swimming Pool Health Regulation (RG 15 Dec 2011/28143) Art. 14: only Ministry-licensed disinfectants and pool chemicals; the device is not a chemical. Art. 12: monthly inspection by the İl Sağlık Müdürlüğü. Turkish PED transposition means SEP, no CE. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">No certification; operator logs the device for the monthly inspection.</div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ MIDDLE EAST & AFRICA ============ -->
+<section id="r-mea">
+  <div class="sechead"><h2>Middle East &amp; Africa</h2><p>No jurisdiction names NSF/ANSI 50 in its pool rules and none has a conformity scheme that captures a passive PVC device. Every one licenses the operator and most require approval to modify a licensed pool.</p></div>
+  <div class="cards">
+
+  <article class="card" id="ae-dxb" data-gate="approve" data-cert="none">
+    <header><h3>UAE · Dubai</h3><span class="chip c-none">Not required (EN cited)</span><span class="chip g-approve">Approval required</span><span class="wq">FC ≥1 (≥2 &gt;26 °C; spa ≥4) · ≤10 · LSI ±0.5 · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Dubai Municipality DM-HSD-GU81-PSPS2 Public Swimming Pools Safety Guidelines V3.0 (Apr 2024) §4-5: design to DM Local Orders and "acceptable standards (e.g. BS EN 15288, BS EN 13451)"; NSF 50 not named. MoIAT ECAS and Dubai Central Laboratory schemes do not list pool circulation devices. Companion GU34 plan-approval guideline requires equipment details on plans. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Process</div><div class="v">GU81 Table 5 permits UV + H₂O₂ as a disinfectant only for small indoor pools; automatic pH and disinfectant dosing mandatory; stabiliser banned indoors. Silent on passive devices. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">GU81 §4-4: "All swimming pools shall not be altered or modified… without the necessary approval from Dubai Municipality"; §4-2 requires a Preliminary Hazard Assessment for pool modification. In PCFC/JAFZA/Nakheel areas, Trakhees-CED approves (LD-RC-G10). <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator files the device as a minor plant modification under §4-4 with an updated PHA and the IAPMO listing; Trakhees NOC in PCFC areas. No ECAS or DCL registration.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ae-auh" data-gate="approve" data-cert="none">
+    <header><h3>UAE · Abu Dhabi</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">FC 1–2 · spa ≥1.5, ≤5 · turnover 6 h · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">Guide to the Executive Regulations of Law No. 2 of 2012 (Resolution 3 of 2018), Abu Dhabi Municipality Public Health: filtration types, approved disinfectants, Abu Dhabi International Building Code §3109; no NSF or EN product standard named. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">§4(1): never operate or make any modifications without obtaining a licence; §6(4) licence file must include a diagram of pipelines, circulation and disinfection systems. Pools over 280 m² must use certified treatment companies (§17(2)). ADPHC sets emirate standards; municipalities inspect. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Amend the licence circulation diagram through the municipality Public Health Division; certified contractor installs; show the 1–2 mg/L regime is unchanged.</div>
+    </div>
+  </article>
+
+  <article class="card" id="sa" data-gate="notify" data-cert="none">
+    <header><h3>Saudi Arabia</h3><span class="chip c-none">SABER check</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · SABER if HS code is SASO-regulated</span><span class="wq">FC 1–3 · pH 7.2–7.8 (inferred from SBC 1401 / ISPSC)</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">SABER conformity is mandatory for electrical pool products; no SASO technical regulation found for non-electrical circulation devices. The HS classification (plastic fittings vs. water-treatment apparatus) decides whether SABER applies. Saudi Building Code SBC 1401 Swimming Pool and Spa Code (2024) covers "modification, repair and maintenance" and is ICC/ISPSC-derived, which likely carries the NSF 50 reference. <span class="conf">SECONDARY / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">Balady municipal licence for commercial activities; SBC 1401 scope suggests consultant sign-off for plant changes. Ministry of Health numbers not retrieved. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Import conformity is confirmed with a SABER-approved certification body for the device's customs classification; the device is documented under SBC 1401 as NSF 50-listed equipment, and the licensed pool contractor handles municipal notification.</div>
+    </div>
+  </article>
+
+  <article class="card" id="qa" data-gate="notify" data-cert="none">
+    <header><h3>Qatar</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC 1–3 indoor, 2–4 outdoor/spa · combined ≤0.2 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">MOPH Health &amp; Safety Guidelines for Recreational Water §5: filters, strainers and continuous cleaning equipment required; no product standard. Disinfection must be automatic; reduced FC (0.5) with ozone or UV needs MOPH approval after a risk assessment. Passive conditioning not addressed. Kahramaa code covers potable installations only. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">§3: MOPH operating permit applied for two months or more before opening, renewed periodically; MOPH inspects. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Notify the MOPH Environmental Health Section at permit renewal; no product registration.</div>
+    </div>
+  </article>
+
+  <article class="card" id="gulf" data-gate="none" data-cert="none">
+    <header><h3>Oman · Bahrain · Kuwait · Jordan · Egypt</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC 1–3 typical · pH 6.8–7.8</span></header>
+    <div class="rows">
+      <div class="k">By country</div><div class="v"><ul>
+        <li><b>Bahrain</b> — MoH Precautionary Measures for Swimming Pools (May 2021): approved chemicals, dosing and measuring equipment, records; FC 1–3, pH 6.8–7.8. <span class="conf">VERIFIED</span></li>
+        <li><b>Kuwait</b> — PAI KUCAS regulated list is electrical and consumer goods; pool circulation devices not listed. MoH/MoCI joint health guide (Aug 2025) sets pool chlorine limits; Arabic text not retrieved. <span class="conf">VERIFIED / SECONDARY</span></li>
+        <li><b>Jordan</b> — JS 1562/2004 pool water standard; MoH monitoring; FC 1–2, pH 7.2–7.8. <span class="conf">SECONDARY</span></li>
+        <li><b>Egypt</b> — ES 418/1995 pool water; GOEIC Decree 43/2016 registration covers listed consumer goods, not this device; MoHP licenses pools; Ministry of Tourism classifies hotels. <span class="conf">SECONDARY / INFERRED</span></li>
+        <li><b>Oman</b> — municipality local orders plus MoH environmental health; no official text retrieved. <span class="conf">INFERRED</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">No product registration applies in any of the five; the health inspector is informed through the facility licence.</div>
+    </div>
+  </article>
+
+  <article class="card" id="il" data-gate="notify" data-cert="none">
+    <header><h3>Israel</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC 0.8–2.0 (≥2.5 w/ cyanurate) · turnover 6 h · pH 7.2–7.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Business Licensing Regulations (Proper Sanitary Conditions for Swimming Pools) 5754-1994 §6(a): alternative disinfectants need MoH Director approval; §6(e) non-chlorine methods must be equivalent. A non-disinfecting device is outside §6. No SII standard mandated for treatment equipment. 2019 amendment not read. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Present to the MoH district engineer as a non-disinfecting hydrodynamic conditioner; keep FC at 0.8–2.0.</div>
+    </div>
+  </article>
+
+  <article class="card" id="za" data-gate="notify" data-cert="none">
+    <header><h3>South Africa</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FAC 0.5–3.0 · pH 7.2–7.8 (Cl), 7.2–8.0 (Br)</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">National Environmental Health Norms and Standards (GN R1229, Dec 2015), public pools section: valid Health Certificate from the municipal Environmental Health Practitioner; water quality per SANS 241; microbiological monitoring incl. Legionella. No equipment standard; no SABS/NRCS compulsory specification for pool circulation devices. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Inform the municipal EHP; municipal by-laws (e.g. Buffalo City) may set their own FC/pH bands.</div>
+    </div>
+  </article>
+
+  <article class="card" id="africa" data-gate="none" data-cert="none">
+    <header><h3>Morocco · Tunisia · Kenya · Tanzania · Mauritius · Seychelles · Nigeria</h3><span class="chip c-none">PVoC (KE, TZ)</span><span class="chip g-none">None needed</span><span class="wq">WHO Vol. 2: FC 1–3 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">By country</div><div class="v"><ul>
+        <li><b>Kenya</b> — KEBS KS 2595:2015 public aquatic facilities and KS 2793 equipment standards exist; PVoC import inspection applies; county public health officers license pools. <span class="conf">SECONDARY</span></li>
+        <li><b>Tanzania / Zanzibar</b> — TBS PVoC on import; MoH and Zanzibar tourism commission licensing; WHO ranges. <span class="conf">INFERRED</span></li>
+        <li><b>Seychelles</b> — Tourism Development (Standards) Regulations 2023: daily pH and chlorine checks recorded and shown to assessors; no numeric values or equipment standard. <span class="conf">VERIFIED</span></li>
+        <li><b>Mauritius</b> — Tourism Authority licence requires health and fire clearances; Public Health Act. <span class="conf">SECONDARY</span></li>
+        <li><b>Morocco, Tunisia</b> — MoH provincial hygiene services plus tourism classification; French-style values referenced; no NM certification for pool devices. <span class="conf">INFERRED</span></li>
+        <li><b>Nigeria</b> — SONCAP covers regulated import categories; passive PVC device likely outside; state MoH inspection. <span class="conf">INFERRED</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">PVoC certificate on shipment where required; contractor-led install; hotel-brand standard drives the spec.</div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ ASIA-PACIFIC ============ -->
+<section id="r-apac">
+  <div class="sechead"><h2>Asia-Pacific</h2><p>No product-certification scheme for pool equipment anywhere in the region. Rules fix the water and the disinfectant, not passive hardware. The trigger is whether the install counts as an alteration to a licensed plant, which bites in Hong Kong, Japan, Singapore and Western Australia.</p></div>
+  <div class="cards">
+
+  <article class="card" id="au" data-gate="none" data-cert="none">
+    <header><h3>Australia · national layer</h3><span class="chip c-none">Not required (no WaterMark)</span><span class="wq">APVMA registers chemicals only · ACL ss 18, 29 govern claims</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">WaterMark (NCC Vol 3 / AS 5200) applies to products in a plumbing installation covered by the Plumbing Code. Neither the WaterMark Schedule of Products 2025-2 nor the Schedule of Excluded Products 2026-1 lists swimming-pool circulation or treatment equipment; the nearest entries ("water conditioner… for conditioning of water and prevention of scaling", AS 3497) are drinking-water-service products. A device on the pool return loop is not part of a water service. NSF/ANSI 50 is not referenced in any state guideline. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Process</div><div class="v">All four states restrict primary disinfection to APVMA-registered chlorine or bromine and treat UV, ozone and ionisation as adjuncts; none requires approval of a passive adjunct that leaves the chlorine/pH regime intact. AS 1926.3-2010 (recirculation systems) and AS 3979 (hydrotherapy) are the cited standards. <span class="conf">VERIFIED</span></div>
+      <div class="k">Claims</div><div class="v">Australian Consumer Law ss 18 and 29 and the ACCC guide "Making environmental claims" (Dec 2023): state the NSF 50 test basis and that results are site-dependent. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">The IAPMO R&amp;T listing serves as independent third-party certification. A written opinion from a WaterMark conformity assessment body confirming that the device lies outside the Plumbing Code's scope is available for procurement files.</div>
+    </div>
+  </article>
+
+  <article class="card" id="au-nsw" data-gate="none" data-cert="none">
+    <header><h3>Australia · New South Wales</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC ≥1.0 outdoor, ≥2.0 indoor/spa, ≥3.0 w/ CYA · +1.0 if pH &gt;7.6 · pH 7.0–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Public Swimming Pool and Spa Pool Advisory Document (2013) §1.5: "NSW Health is not an approval authority… does not have the power to approve of chemicals, disinfectants, pool design or pool operational activities." Public Health Regulation Sch. 1: chlorine or bromine by automated dosing; §4.5 "no objections to the use of adjuncts." <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Occupier notifies the local council of the pool's existence (notification, not approval). A like-for-like in-line fitting in an existing plant room is not development under the EP&amp;A Act and pool loop pipework is not plumbing work under the Plumbing and Drainage Act. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Nothing to seek. Give the hotel an updated plant schematic and a note for its water-quality records.</div>
+    </div>
+  </article>
+
+  <article class="card" id="au-qld" data-gate="none" data-cert="none">
+    <header><h3>Australia · Queensland</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC ≥1.0 (≥2.0 w/ CYA; spa 3.0) · ≤10 · CYA ≤50 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Water Quality Guidelines for Public Aquatic Facilities (Dec 2019) §3.1: "There are no Queensland Government laws for water quality at public aquatic facilities"; the Public Health Act 2005 requires no public-health risk. Some councils adopt the guideline through local laws under the Local Government Act 2009. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Council by council (Gold Coast, Brisbane, Cairns): confirm whether a local law or permit condition adopts the guideline; otherwise install and record it in the Water Quality Risk Management Plan.</div>
+    </div>
+  </article>
+
+  <article class="card" id="au-vic" data-gate="none" data-cert="none">
+    <header><h3>Australia · Victoria</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC ≥1.0 (≥2.0 w/ CYA; spa 3.0) · ≤10 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Public Health and Wellbeing Regulations 2019 Part 6 Div 3 plus the 2020 water-quality guideline: filtration with chlorine- or bromine-based primary disinfection; ozone and UV as secondary. Hotel, motel and apartment pools are Category 2 (no registration); Category 1 pools register with council. All operators hold a WQRMP and keep 12 months of records. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Hotel pools need no registration; installer provides a WQRMP amendment page and O&amp;M sheet.</div>
+    </div>
+  </article>
+
+  <article class="card" id="au-wa" data-gate="notify" data-cert="none">
+    <header><h3>Australia · Western Australia</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC ≥1.0 (&lt;26 °C), ≥2.0 (&gt;26 °C); stabilised 2.0/3.0; spa 3.0 · total ≤8 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Code of Practice for Aquatic Facilities (Chief Health Officer, Jan 2020) under the Health (Aquatic Facilities) Regulations 2007. Water-treatment plant is approved by the CHO per bather-load classification (§3.1); replacement filters below the approved capacity are prohibited and even fitting a variable-speed drive needs an Appendix 11 form to the Department of Health (§3.2.7). The CoP's explicit concern is circulation capacity and turnover. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">WA Health (Water Unit) is written to with the listing, hydraulic data showing that the 2.6 psi head loss does not affect the approved turnover, and a statement that disinfection is unchanged, requesting confirmation that the installation is not an alteration requiring re-approval.</div>
+    </div>
+  </article>
+
+  <article class="card" id="nz" data-gate="none" data-cert="none">
+    <header><h3>New Zealand</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FAC 1.5–7.0 (Cl alone) · 0.5–5.0 (Cl + O₃/UV/ClO₂) · pH 7.2–8.0</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">NZS 4441:2008 (design) and NZS 5826:2010 (water quality) are voluntary standards adopted through Recreation Aotearoa PoolSafe accreditation; NZS 5826 §2.13 already contemplates alternative treatment alongside chlorine. No national licensing; Health Act 1956 nuisance powers and territorial bylaws. WaterMark not used in NZ. <span class="conf">SECONDARY</span></div>
+      <div class="k">Install</div><div class="v">Building Act 2004 Sch. 1 Exemption 1 covers repair and replacement of components in the same position; plant-room equipment changes are generally exempt. Confirm with the territorial authority in writing if the pool is inside a consented building. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Document against NZS 5826 §2.13; provide a PoolSafe-ready O&amp;M sheet; TA check only for consented specified systems.</div>
+    </div>
+  </article>
+
+  <article class="card" id="sg" data-gate="notify" data-cert="none">
+    <header><h3>Singapore</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">FC 1–3 (spa 3–5) · turbidity ≤0.5 NTU · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Environmental Public Health (Licensable Aquatic Facilities) Regulations 2021 (S 644/2021) reg. 4(1): water disinfected only with non-gaseous chlorine (outdoor) or chlorine/bromine (indoor) "or any other chemical approved by the Director-General." A passive device is not a chemical and does not change the disinfectant. Reg. 7(1)(c): circulation and purification systems kept in good working order. PUB approval is for the fill and backflow side only. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">The NEA licence (per filtration loop, annual) is granted on a Professional Engineer-endorsed schematic of circulation, filtration and disinfection. No express "no alteration" clause, but because the licence rests on the schematic, an updated PE-endorsed schematic should go to NEA. Hotel and in-villa pools are licensable. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Install with PE sign-off on an updated schematic; licensee submits it to NEA at renewal or via the licensing officer.</div>
+    </div>
+  </article>
+
+  <article class="card" id="hk" data-gate="approve" data-cert="none">
+    <header><h3>Hong Kong</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">Free residual Cl 1–3 · turnover ≤4 h covered / ≤6 h open-air · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Swimming Pools Regulation (Cap. 132CA): licence from the Director of Food and Environmental Hygiene; conditions require filtration or purification plant, E. coli absent per 100 mL, turnover limits, daily FC/pH board. No equipment standard; silent on disinfection technology. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v"><b>Main Licensing Condition 1: "no alteration or addition shall be made to the premises without the prior approval of the Director."</b> Licence plans include the filtration plant-room layout and schematic flow certified by an Authorized Person; changes require amended plans. Government pools are LCSD-run and procured separately. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Licensee's Authorized Person files a minor-alteration application with an amended schematic to the FEHD Licensing Office before install; include the listing and head-loss data to show the 4 h / 6 h turnover is preserved.</div>
+    </div>
+  </article>
+
+  <article class="card" id="jp" data-gate="approve" data-cert="none">
+    <header><h3>Japan</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">Free residual Cl ≥0.4, ≤1.0 desirable · turbidity ≤2 · pH 5.8–8.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">MHLW 遊泳用プールの衛生基準 (2007 rev.) is technical advice enforced through prefectural ordinances. Continuous chlorine injection is the baseline; chlorine dioxide permitted; ozone and UV may supplement. No JIS or third-party certification mandated. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Prefectural ordinances (e.g. Tokyo プール等取締条例) require a 保健所 permit and a 変更届 for equipment changes: "depending on the scale of the change a new permit may be required… consult the 保健所 in advance." <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Operator files a 変更届 with the local 保健所 before install after pre-consultation; provide a Japanese translation of the IAPMO listing and a circulation-flow statement. 景品表示法 governs the 41% claim.</div>
+    </div>
+  </article>
+
+  <article class="card" id="cn" data-gate="notify" data-cert="none">
+    <header><h3>China (mainland)</h3><span class="chip c-none">Not required (no CCC)</span><span class="chip g-notify">Notify authority</span><span class="chip p-closed">Conditional · 消毒 filing if any disinfection claim</span><span class="wq">Free residual Cl 0.3–1.0 · combined ≤0.4 · ORP ≥650 mV · CYA ≤50 · pH 7.0–7.8</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">GB 37488-2019 sets pool-water limits; GB 37489.3-2019, CJJ 122-2017 and CJ/T 244-2016 are design and quality codes. CCC does not cover passive plumbing. The 消毒管理办法 captures products that <em>claim</em> disinfection (evaluation report and filing); 涉水产品 hygiene licences are drinking-water only. <b>Never market it in China as a 消毒 device.</b> <span class="conf">SECONDARY / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">公共场所卫生管理条例 and 2017 implementing rules: pools hold a 卫生许可证 granted on a 卫生设施平面布局图 and a hygiene test report. Re-application only for change of business scope or address; a plant change should update the layout drawing and the annual test report. AHJ is the county 卫生健康 authority. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">Import as a general PVC pool-plant fitting (HS 3917 / 8421 family, no CCC); avoid disinfection claims; hotel updates its layout drawing and keeps GB 37488 monthly reports. 广告法 requires domestic test support for performance claims.</div>
+    </div>
+  </article>
+
+  <article class="card" id="kr" data-gate="none" data-cert="none">
+    <header><h3>South Korea</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">Free residual Cl 0.4–1.0 · combined ≤0.5 · turbidity ≤1.5 NTU · pH 5.8–8.6</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Sports Facilities Act 시행규칙 별표 4 (facility standards) and 별표 6 (hygiene): water passes the filter three or more times per day; quality limits; no restriction on supplementary treatment. KC mark covers electrical and household goods, not passive plumbing. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">수영장업 is a 신고 (reported) business with the city/county; 변경신고 only if reported facility particulars change, which an in-line fitting normally does not. <span class="conf">INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">No approval is required; the installer confirms that the reported facility particulars (신고) are unchanged. Korea's 1.0 mg/L ceiling makes lower chlorine demand of direct operational value.</div>
+    </div>
+  </article>
+
+  <article class="card" id="sea" data-gate="none" data-cert="none">
+    <header><h3>Thailand · Malaysia · Indonesia · Philippines · Vietnam</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">FC bands vary 0.2–3.0 · pH 7.0–7.8</span></header>
+    <div class="rows">
+      <div class="k">By country</div><div class="v"><ul>
+        <li><b>Thailand</b> — pools are a "business hazardous to health" under the Public Health Act B.E. 2535, licensed annually by the local authority under its own ordinance; Department of Health guidance FC 1.0–3.0, pH 7.2–7.6 (ordinances vary, Bangkok pH to 8.4). No device approval. <span class="conf">SECONDARY</span></li>
+        <li><b>Malaysia</b> — MOH Engineering Services guideline for pool water monitoring (residual Cl 0.5–3.0, pH 7.0–7.8); local council (PBT) by-laws license pools; SIRIM voluntary; SPAN covers potable products only. Check the PBT by-law for any alteration clause. <span class="conf">SECONDARY / INFERRED</span></li>
+        <li><b>Indonesia (incl. Bali)</b> — Permenkes 32/2017: free Cl 1–1.5, bound ≤3, ORP ≥720 mV, pH 7–7.8; pH and residual tested three times daily and displayed. Dinas Kesehatan supervises through the Laik Sehat certificate; Bahasa labelling for imports. <span class="conf">VERIFIED / SECONDARY</span></li>
+        <li><b>Philippines</b> — PD 856 Code on Sanitation Ch. VIII ss. 51–53: annual sanitary permit from the city or municipal health officer; DOH IRR chlorine residual 0.5–1.0 ppm and disc clarity. No plant-alteration approval. <span class="conf">VERIFIED / SECONDARY</span></li>
+        <li><b>Vietnam</b> — Decree 36/2019 and Circular 03/2018/TT-BVHTTDL (sports business conditions); water per QCVN 01-1:2018/BYT (free Cl 0.2–1.0, pH 6.0–8.5); provincial Sở VHTTDL eligibility certificate. <span class="conf">SECONDARY</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">No approval is required in any of the five. Operating documentation is supplied in the local language and free chlorine is held inside the local band; the 1.0 ppm ceilings in the Philippines and Vietnam make lower chlorine demand of direct operational value.</div>
+    </div>
+  </article>
+
+  <article class="card" id="in" data-gate="none" data-cert="none">
+    <header><h3>India</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">Total residual Cl 0.5 inlet max, 0.2 outlet min · pH 7.5–8.5 (IS 3328; secondary sources cite 7.2–7.8)</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">IS 3328:1993 (BIS, voluntary, referenced by NBC 2016) covers water only; no BIS Quality Control Order covers pool devices. State and municipal licensing (e.g. Delhi Police Swimming Pools Regulation 1980 with MCD health trade licence and lab report). <span class="conf">VERIFIED / SECONDARY</span></div>
+      <div class="k path">In practice</div><div class="v path">An IS 3328 test report accompanies the licence renewal. Because the residual band is very low, the 41% figure is expressed as a reduction in chlorine demand, never as a reduction of the regulated residual.</div>
+    </div>
+  </article>
+
+  <article class="card" id="islands" data-gate="none" data-cert="none">
+    <header><h3>Maldives · Fiji · French Polynesia</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">WHO Vol. 2: FC 1–3 · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">By territory</div><div class="v"><ul>
+        <li><b>Maldives</b> — Tourism Act 2/99 and Regulation 2020/R-27 cover safety, not water chemistry; HPA and the national lab have sampling procedures; no product or plant-change approval. Brand-standard driven. <span class="conf">SECONDARY / INFERRED</span></li>
+        <li><b>Fiji</b> — Public Health Act 1935 general powers; no pool regulation found; MoH environmental health officers inspect. <span class="conf">INFERRED</span></li>
+        <li><b>French Polynesia</b> — health is a territorial competence; metropolitan CSP values do not apply automatically; local arrêtés under the Direction de la santé. <span class="conf">INFERRED</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">No regulator approval applies; the IAPMO listing and WHO-aligned operating documentation are supplied to the resort's engineering team.</div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ LATIN AMERICA ============ -->
+<section id="r-latam">
+  <div class="sechead"><h2>Latin America</h2><p>No product certification for pool equipment anywhere. Pools are licensed as sanitary establishments tied to an approved project; the recurring hook is "modification requires health-authority approval," and the chemical-registration regimes (ANVISA, ANMAT, INVIMA) never reach a device that doses nothing.</p></div>
+  <div class="cards">
+
+  <article class="card" id="br" data-gate="notify" data-cert="none">
+    <header><h3>Brazil</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">NBR 10818: FC 0.8–3.0, pH 7.2–7.8 · SP code Art. 123: Cl 0.5–0.8, pH 6.7–7.9</span></header>
+    <div class="rows">
+      <div class="k">Certification</div><div class="v">ABNT NBR 10339:2018 (pool design and maintenance) and NBR 10818:2016 (water quality) are voluntary unless adopted locally. INMETRO compulsory certification covers drinking-water appliances, not pool equipment. Pool chemicals are ANVISA saneantes; a non-chemical device is outside ANVISA. No national pool law; regulation is state and municipal. <span class="conf">SECONDARY / INFERRED</span></div>
+      <div class="k">Install</div><div class="v">São Paulo Código Sanitário (Decreto 12.342/78) Art. 117: no pool may operate except per "the project approved by the health authority"; collective pools need an alvará after inspection. A change to the recirculation train is a project deviation to be filed with the Vigilância Sanitária. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">File a one-page "alteração de projeto" note with the local Vigilância Sanitária where the state code ties operation to the approved project; keep NBR 10818 logs unchanged. CDC Art. 37 governs the 41% claim.</div>
+    </div>
+  </article>
+
+  <article class="card" id="ar" data-gate="approve" data-cert="none">
+    <header><h3>Argentina</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="chip p-closed">Conditional · CABA equipment-certificate addendum</span><span class="wq">CABA: total residual Cl 0.4–0.6 ppm (chloramine 0.7–1.0) · pH 7.2–7.8</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">No federal rule. CABA Ordenanza 41.718 (now Ley 3.364 / Decreto 150/2015) Art. 3(a): habilitación requires a "Certificado de aprobación de los equipos de tratamiento del agua" from the health secretariat; Art. 36(f): disinfection by chlorine or equivalent. Province of Buenos Aires: Decretos 4030/1975 and 3181/2007. Chemicals are ANMAT domisanitarios; the device is not. <span class="conf">VERIFIED / SECONDARY</span></div>
+      <div class="k path">In practice</div><div class="v path">In CABA, submit the NSF 50 certificate to the Agencia Gubernamental de Control as an addendum to the treatment-equipment certificate on file; elsewhere notify the municipal bromatology office.</div>
+    </div>
+  </article>
+
+  <article class="card" id="cl" data-gate="approve" data-cert="none">
+    <header><h3>Chile</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">Free residual Cl 0.5–1.5 · turnover ≥3/day · pH 7.2–8.2</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">D.S. 209/2002 MINSAL Reglamento de Piscinas de Uso Público Art. 15: disinfection with chlorine "u otro desinfectante aprobado previamente por el Servicio de Salud." Chlorine stays, so Art. 15 is satisfied. No product certification; SEC covers electrical and gas only. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Art. 3 project approval before construction; <b>Art. 9: "Cualquier modificación en una piscina… deberá ser expresamente autorizada por dicha autoridad"</b>; Art. 4 three-year operating authorisation. AHJ is the regional SEREMI de Salud. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Short "solicitud de autorización de modificación" under Art. 9 to the SEREMI with the listing, hydraulic drawing and unchanged-regime statement; expect a desk approval.</div>
+    </div>
+  </article>
+
+  <article class="card" id="co" data-gate="none" data-cert="none">
+    <header><h3>Colombia</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">Free residual Cl 1–3 · combined &lt;0.3 · CYA &lt;100 · pH 7.0–8.0</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Ley 1209/2008, Decreto 554/2015 (applies to hotels, clubs, condominiums) and Resolución 1618/2010 (water quality). Only safety devices (alarms, SVRS) need homologation; Art. 7 requires INVIMA registration for chemical disinfectants, not devices. A 2025 MinSalud draft to replace Res. 1618 is in consultation. <span class="conf">VERIFIED / SECONDARY</span></div>
+      <div class="k path">In practice</div><div class="v path">No approval; add the device to the pool's safety plan and equipment register; hold the certificate for the Secretaría de Salud inspector.</div>
+    </div>
+  </article>
+
+  <article class="card" id="pe" data-gate="approve" data-cert="none">
+    <header><h3>Peru</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="wq">Free residual Cl 0.4–1.2 · combined ≤0.6 · turnover ≥3/day hotels · pH 6.5–8.5</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">D.S. 007-2003-SA Reglamento Sanitario de Piscinas Art. 41 lists recirculation components; Art. 45 wants piping designed for minimal accessory head loss with union joints for quick dismantling (AquaRev's unions and 2.6 psi fit); Art. 47 automatic disinfection device mandatory. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Art. 8 sanitary project approval; <b>Art. 12: any change "deberá ser oportunamente comunicado a la autoridad de salud… para obtener la correspondiente aprobación."</b> AHJ is the DIRESA/DISA under DIGESA. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Send an Art. 12 "comunicación de modificación" to the DIRESA Salud Ambiental office with the listing and isometric.</div>
+    </div>
+  </article>
+
+  <article class="card" id="cr" data-gate="notify" data-cert="none">
+    <header><h3>Costa Rica</h3><span class="chip c-none">Not required</span><span class="chip g-notify">Notify authority</span><span class="wq">Free residual Cl 1.2–3 (2–3 with bathers) · combined ≤0.3 · pH 6.8–8.0</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Decreto 35309-S Reglamento sobre Manejo de Piscinas Art. 35: chemicals registered with the Ministerio de Salud; non-residual disinfection must be paired with a residual product; chlorine gas prohibited. Device is not a chemical. <span class="conf">VERIFIED</span></div>
+      <div class="k">Install</div><div class="v">Art. 4(a): "Toda construcción, ampliación o modificación de una piscina" must comply with the Permiso Sanitario de Funcionamiento regulation (Decreto 34728-S); two-year PSF from the Área Rectora de Salud. <span class="conf">VERIFIED</span></div>
+      <div class="k path">In practice</div><div class="v path">Treat as a modificación: notify the Área Rectora with the listing when renewing or amending the PSF.</div>
+    </div>
+  </article>
+
+  <article class="card" id="uy" data-gate="approve" data-cert="none">
+    <header><h3>Uruguay</h3><span class="chip c-none">Not required</span><span class="chip g-approve">Approval required</span><span class="chip p-closed">Conditional · "any other method" needs approval</span><span class="wq">Free Cl 0.4–0.6 ppm · combined 0.7–1.0 · turnover ≤8 h · pH 7.0–8.0</span></header>
+    <div class="rows">
+      <div class="k">Process</div><div class="v">Montevideo Digesto Vol. XV Cap. VIII <b>Art. D.3649: "cualquier otro método de higienización del agua fuera del establecido precedentemente deberá ser aprobado por los Servicios de Salubridad."</b> Strictest wording in the region; a supplemental conditioner is arguably an "other method." Other departments have their own ordinances; no national MSP decree. <span class="conf">VERIFIED / INFERRED</span></div>
+      <div class="k path">In practice</div><div class="v path">A written no-objection from Montevideo's Servicio de Salubridad, describing the device as a hydraulic accessory with chlorination unchanged, is obtained before installation and applies to subsequent installations in the department.</div>
+    </div>
+  </article>
+
+  <article class="card" id="latam-rest" data-gate="none" data-cert="none">
+    <header><h3>Panama · Ecuador · Guatemala</h3><span class="chip c-none">Not required</span><span class="chip g-none">None needed</span><span class="wq">No national pool parameters · WHO Vol. 2 as reference</span></header>
+    <div class="rows">
+      <div class="k">By country</div><div class="v"><ul>
+        <li><b>Panama</b> — Decreto Ejecutivo 176/2019 Art. 27: pools need a MINSA Constancia de Inspección Sanitaria (three-year); no water parameters or equipment rules; DGNTI-COPANIT covers drinking water. <span class="conf">SECONDARY</span></li>
+        <li><b>Ecuador</b> — ARCSA Resolución 2023-001 lists pools as controlled establishments needing an annual permiso de funcionamiento; no national pool water norm; INEN has no pool-equipment standard. <span class="conf">VERIFIED / INFERRED</span></li>
+        <li><b>Guatemala</b> — Código de Salud Art. 101: pool construction, installation and operation need a favourable MSPAS technical opinion before municipal approval; no specific pool regulation issued. <span class="conf">VERIFIED</span></li>
+      </ul></div>
+      <div class="k path">In practice</div><div class="v path">Install, keep the certificate in the sanitary-permit file, and anchor the contract to WHO Vol. 2 parameters since no national numbers exist.</div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ RULES ============ -->
+<section id="rules">
+  <div class="sechead"><h2>Principles that apply in every market</h2><p>Six commitments hold across all 60 jurisdictions and every US state. They describe how AquaRev is certified, described and installed wherever it is used.</p></div>
+  <div class="rules">
+    <div class="rule hard"><h4>AquaRev is not a disinfectant</h4><p>The device supplements the pool's existing chlorine or bromine disinfection; it does not replace it and makes no claim to kill or control bacteria or algae. That is why it sits outside pesticide-device rules in the United States, the Biocidal Products Regulation in the European Union, disinfection-product filing in China, and the "approved disinfectant" clauses found in Chile, Greece, Israel, Singapore and Costa Rica.</p></div>
+    <div class="rule hard"><h4>France: hydraulic conditioning only</h4><p>French law reserves any process presented as lowering chloramines or combined chlorine for ANSES authorisation. In France, AquaRev is presented solely as a hydraulic conditioning device that reduces chlorine consumption while the statutory water-quality limits are maintained.</p></div>
+    <div class="rule"><h4>Certified to the standard the codes name</h4><p>Every US and Canadian code that requires NSF/ANSI 50 names the standard, or any ANSI- or SCC-accredited certifier; New York expressly accepts "another testing laboratory". AquaRev's certification by IAPMO R&amp;T, an ANSI- and SCC-accredited body, and its USPC mark satisfy each of them.</p></div>
+    <div class="rule"><h4>How the 41% figure is substantiated</h4><p>The figure is the certified reduction claim from NSF/ANSI/CAN 50 testing: a 41% reduction in the chlorine needed to maintain test-pool chemistry, under stated test conditions, with site results varying by pool. It is always stated in that form, consistent with the US FTC Act and Green Guides, EU Directive 2024/825, the UK Green Claims Code, Australian Consumer Law and their counterparts elsewhere. AquaRev makes no generic "eco" or "green" claim.</p></div>
+    <div class="rule"><h4>The regulated residual is always maintained</h4><p>AquaRev reduces chlorine <em>demand</em>: the amount of chlorine consumed to hold the residual the regulation requires. The free-chlorine minimum and pH band of every jurisdiction continue to apply unchanged, and each installation includes a monitoring record for the first four to eight weeks of operation.</p></div>
+    <div class="rule"><h4>Authority documentation with every installation</h4><p>Every installation is supplied with a documentation package for the approving authority: what the device is, its certification listing, confirmation that it is passive and that disinfection is unchanged, and its hydraulic data. The package is provided in the local language with the relevant code citation from this reference.</p></div>
+  </div>
+  <h3 style="margin-top:28px">Free-chlorine minimums maintained in every installation (mg/L)</h3>
+  <div class="floors">
+    <div><div class="n">0.2<small>min</small></div><div class="w">Switzerland, Vietnam, India (outlet)</div></div>
+    <div><div class="n">0.3<small>min</small></div><div class="w">Germany, Austria, Poland, China</div></div>
+    <div><div class="n">0.4<small>min</small></div><div class="w">France, Greece, Denmark, Sweden, Norway, Japan, Korea, Peru, Uruguay, Argentina (CABA)</div></div>
+    <div><div class="n">0.5<small>min</small></div><div class="w">UK, Spain, Netherlands, Portugal, Ontario, BC, Quebec, Jamaica, Barbados, Chile, Philippines, Malaysia, South Africa</div></div>
+    <div><div class="n">0.6<small>min</small></div><div class="w">New York, Hawaii</div></div>
+    <div><div class="n">0.8<small>min</small></div><div class="w">Israel, Brazil (NBR 10818)</div></div>
+    <div><div class="n">1.0<small>min</small></div><div class="w">MAHC, TX, FL, AZ, IL, GA, NV, Mexico, Puerto Rico, Dubai, Abu Dhabi, Qatar (indoor), Singapore, Hong Kong, Australia (all states), Colombia, Indonesia, Turkey</div></div>
+    <div><div class="n">1.5<small>min</small></div><div class="w">Washington State, New Zealand (chlorine alone)</div></div>
+    <div><div class="n">2.0<small>max</small></div><div class="w">Quebec and Spain cap FC at 2.0; Japan, Korea, the Philippines and Vietnam cap it at 1.0. Where the ceiling is tight, a lower chlorine demand is of direct operational value.</div></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p><b>About this reference.</b> AquaRev Water compiled this reference from primary legislation and health-authority guidance current to September 2026. Each finding states its basis: VERIFIED where the regulation or authority text was consulted directly, SECONDARY where an official or reputable summary was relied on, and INFERRED where the position is reasoned from the legal framework. Source citations for any jurisdiction are available on request.</p>
+  <p><b>Working with your authority.</b> AquaRev supplies a documentation package with every installation and assists operators and installers with the notification or approval steps described here. Water-quality values are shown for chlorinated fresh-water pools; spa, bromine and saltwater bands differ.</p>
+  <p>This reference is provided for general information and does not constitute legal advice. Regulations change; confirm the cited provision with the relevant authority before relying on it. © 2026 AquaRev Water.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var cards=[].slice.call(document.querySelectorAll('.card'));
+  var q=document.getElementById('q'), count=document.getElementById('count');
+  var btns=[].slice.call(document.querySelectorAll('.controls button'));
+  var filter='all';
+  function apply(){
+    var term=(q.value||'').trim().toLowerCase(), shown=0;
+    cards.forEach(function(c){
+      var okF = filter==='all' || (filter==='req' ? c.dataset.cert==='req' : c.dataset.gate===filter);
+      var okT = !term || c.textContent.toLowerCase().indexOf(term)>-1;
+      var vis = okF && okT; c.classList.toggle('hidden',!vis); if(vis) shown++;
+    });
+    document.querySelectorAll('section .cards').forEach(function(g){
+      var sec=g.closest('section'); var any=[].some.call(g.children,function(c){return !c.classList.contains('hidden')});
+      sec.style.display = any ? '' : 'none';
+    });
+    count.textContent = shown + ' of ' + cards.length + ' cards';
+  }
+  q.addEventListener('input',apply);
+  btns.forEach(function(b){ b.addEventListener('click',function(){
+    filter=b.dataset.f; btns.forEach(function(x){x.setAttribute('aria-pressed', x===b ? 'true':'false')}); apply();
+  })});
+  apply();
+})();
+</script>
+
+</html>
