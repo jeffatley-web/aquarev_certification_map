@@ -16,7 +16,7 @@ DOC="$MASTER/AquaRev_Global_Compliance_Map_V1.html"
 PAGES="https://jeffatley-web.github.io/aquarev_certification_map"
 DOC_URL="$PAGES/compliance-map.html"
 ARTIFACT_DOC="https://claude.ai/artifact/5e3h82FST3RaScjGqJqVT9"
-STAMP="$(date +%Y%m%d)a"
+STAMP="$(date +%Y%m%d%H%M)"
 
 cd "$HERE"
 

@@ -391,7 +391,7 @@ function zoomBy(f){ var W=vb.w,H=vb.h; var k2=Math.max(1,Math.min(14,tk.k*f)); v
 function hoverHtml(j,usa){
   var key = rawKey(j);
   var lab = state.view==='fc' ? VIEWS.fc.desc[key] : (LABELS[state.view]||{})[key] || '';
-  return '<b>'+esc(j.name)+'</b><span class="m">'+esc(lab)+'</span><br><span class="m">FC '+esc(fmtFC(j))+' · pH '+esc(j.ph)+'</span><br>'+esc(j.ahj)+(j.trig?'<br><span class="m">Conditional requirement · see record</span>':'')+'<br><span class="m" style="color:var(--accent)">Click for the full record</span>';
+  return '<b>'+esc(j.name)+'</b><span class="m">'+esc(lab)+'</span><br><span class="m">FC '+esc(fmtFC(j))+' · pH '+esc(j.ph)+'</span><br>'+esc(j.ahj)+(j.trig?'<br><span class="m">Conditional requirement · see record</span>':'')+'<br><span class="m" style="color:var(--ink-3)">Click '+(usa?'the state':(j.ll?'the marker':'the country'))+' to open its record</span>';
 }
 function recolor(){
   if(!map) return;
