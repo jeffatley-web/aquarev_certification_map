@@ -5,72 +5,57 @@ root.innerHTML=`
 <div class="wrap">
 <header class="mast">
   <div>
-    <div class="eyebrow">AquaRev Water · Interactive atlas · Rev 1.0 · September 2026</div>
+    <div class="eyebrow">AquaRev Water · Interactive atlas · September 2026</div>
     <h1>AquaRev Compliance Atlas</h1>
-    <p class="lede">Sixty jurisdictions, one device. Switch the view to see who requires permission before install, who requires NSF/ANSI 50 by law, who restricts treatment processes, and how low the free-chlorine floor sits.</p>
+    <p class="lede">Sixty jurisdictions and every US state, one device. Choose a question, then click any country, marker or state to open its record.</p>
   </div>
-  <div class="links"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html">Full compliance map (document)</a></div>
+  <a class="doc" href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html">Full compliance map (document) →</a>
 </header>
 
-<div class="toolbar" id="toolbar">
-  <div class="group"><span class="lab">View</span>
-    <div class="seg" role="group" aria-label="Metric">
-      <button data-view="gate" aria-pressed="true">Permission to install</button>
-      <button data-view="cert" aria-pressed="false">Product certification</button>
-      <button data-view="process" aria-pressed="false">Process rules</button>
-      <button data-view="fc" aria-pressed="false">Chlorine floor</button>
-      <button data-view="conf" aria-pressed="false">Evidence</button>
-    </div>
-  </div>
-  <div class="group"><span class="lab">Level</span>
-    <div class="seg" role="group" aria-label="Map level">
-      <button data-level="world" aria-pressed="true">World</button>
-      <button data-level="usa" aria-pressed="false">US states</button>
-      <button data-level="list" aria-pressed="false">Table</button>
-    </div>
-  </div>
-  <div class="group" id="regiongroup"><span class="lab">Focus</span>
-    <div class="seg" role="group" aria-label="Region focus">
-      <button data-region="world" aria-pressed="true">All</button>
-      <button data-region="na" aria-pressed="false">N. America</button>
-      <button data-region="carib" aria-pressed="false">Caribbean</button>
-      <button data-region="eu" aria-pressed="false">Europe</button>
-      <button data-region="me" aria-pressed="false">Middle East</button>
-      <button data-region="af" aria-pressed="false">Africa</button>
-      <button data-region="apac" aria-pressed="false">Asia-Pacific</button>
-      <button data-region="latam" aria-pressed="false">Latin America</button>
-    </div>
-  </div>
-  <div class="group search"><span class="lab">Find</span><input type="search" id="q" placeholder="Country, state, agency…" aria-label="Find a jurisdiction"></div>
-</div>
+<nav class="qtabs" id="qtabs" role="tablist" aria-label="Question">
+  <button class="qtab" role="tab" data-view="gate" aria-selected="true"><span class="l">Permission to install</span><span class="d">Who must sign before the cut-in?</span></button>
+  <button class="qtab" role="tab" data-view="cert" aria-selected="false"><span class="l">Product certification</span><span class="d">Is NSF/ANSI 50 required by law?</span></button>
+  <button class="qtab" role="tab" data-view="process" aria-selected="false"><span class="l">Process rules</span><span class="d">Does the law restrict treatment methods?</span></button>
+  <button class="qtab" role="tab" data-view="fc" aria-selected="false"><span class="l">Chlorine floor</span><span class="d">What residual must the pool still hold?</span></button>
+  <button class="qtab" role="tab" data-view="conf" aria-selected="false"><span class="l">Evidence</span><span class="d">How solid is each finding?</span></button>
+</nav>
 
-<div class="stage" id="stage">
-  <div>
-    <div class="mapcard" id="mapcard">
-      <div class="maphead"><h2 id="maptitle">Permission to install: what must happen before the device goes in</h2><span class="hint">Hover for a summary · click for the full record · scroll or drag to zoom and pan</span><button class="help-btn" id="helpbtn" type="button" aria-expanded="false" aria-controls="help" title="How to use this atlas">?</button></div>
-      <div class="help" id="help" role="dialog" aria-label="How to use this atlas" hidden>
-        <h3>How to use this atlas</h3>
-        <p>Click any coloured country or marker to open its record: the five compliance layers and the practical path for that market. Hover for a summary. Scroll or drag on the map to zoom and pan.</p>
-        <ul>
-          <li><b>Permission to install</b> is the one that costs time: red means someone must sign before the cut-in.</li>
-          <li><b>Product certification</b> is required by law only in North America; the IAPMO certificate already satisfies it.</li>
-          <li><b>Process rules</b> are where a wrong word on the spec sheet creates a problem.</li>
-          <li><b>Chlorine floor</b> is the residual the 41% claim must never touch.</li>
-          <li><b>Evidence</b> grades each record: primary text read, reputable summary, or reasoned from the framework.</li>
-        </ul>
-        <div class="foot">Sixty jurisdictions plus all 50 US states and DC, researched 15–16 September 2026. Grey land is not yet researched. Not legal advice.</div>
-      </div>
-      <div class="mapctl"><button id="zin" title="Zoom in" aria-label="Zoom in">+</button><button id="zout" title="Zoom out" aria-label="Zoom out">−</button><button id="zreset" title="Reset view" aria-label="Reset view">⌂</button></div>
-      <div id="map"></div>
-      <div class="legend" id="legend"></div>
+<section class="mapcard" id="mapcard">
+  <div class="mapbar">
+    <div class="seg" role="group" aria-label="Map level"><button type="button" data-level="world" aria-pressed="true">World</button><button type="button" data-level="usa" aria-pressed="false">US states</button><button type="button" data-level="list" aria-pressed="false">Table</button></div>
+    <label class="focus" id="focuswrap"><span class="lab">Focus</span><span class="sel"><select id="focus" aria-label="Region focus"><option value="world">Whole world</option><option value="na">North America</option><option value="carib">Caribbean</option><option value="eu">Europe</option><option value="me">Middle East</option><option value="af">Africa</option><option value="apac">Asia-Pacific</option><option value="latam">Latin America</option></select></span></label>
+    <div class="grow"></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input type="search" id="q" placeholder="Find a country, state or agency" aria-label="Find a jurisdiction" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
+      <div class="results" id="results" role="listbox"></div>
     </div>
-    <div class="listcard hidden" id="listcard"><table id="tbl"><thead><tr><th data-s="name">Jurisdiction</th><th data-s="region">Region</th><th data-s="gate">Permission to install</th><th data-s="cert">Product certification</th><th data-s="process">Process</th><th data-s="trig">Conditional trigger</th><th data-s="fcMin">FC min</th><th data-s="ph">pH</th><th data-s="conf">Evidence</th></tr></thead><tbody></tbody></table></div>
-    <div class="stats" id="stats"></div>
-    <p class="note">Grey land is not yet researched. Sub-national rules for the US, Canada and Australia are summarised at country level on the world map and listed in the panel; the US states level covers all 50 states and the District of Columbia individually. Small territories are drawn as markers. Water-quality values are for chlorinated fresh-water pools.</p>
+    <button class="help-btn" id="helpbtn" type="button" aria-expanded="false" aria-controls="help" title="How to use this atlas">?</button>
   </div>
-  <aside class="panel" id="panel" aria-live="polite"></aside>
+  <div class="help" id="help" role="dialog" aria-label="How to use this atlas" hidden>
+    <h3>How to use this atlas</h3>
+    <p>Choose a question in the strip above; the map recolours to answer it. Click any coloured country or marker to open its record. Click a legend entry or a tile to isolate one answer. Hover for a summary. Scroll or drag on the map to zoom and pan.</p>
+    <ul>
+      <li><b>Permission to install</b> is the one that costs time: red means someone must sign before the cut-in.</li>
+      <li><b>Product certification</b> is required by law only in North America; the IAPMO certificate already satisfies it.</li>
+      <li><b>Process rules</b> are where a wrong word on the spec sheet creates a problem.</li>
+      <li><b>Chlorine floor</b> is the residual the 41% claim must never touch.</li>
+      <li><b>Evidence</b> grades each record: primary text read, reputable summary, or reasoned from the framework.</li>
+    </ul>
+    <div class="foot">Sixty jurisdictions plus all 50 US states and DC, researched September 2026. Grey land is not yet researched. Not legal advice.</div>
+  </div>
+  <div class="maptitle"><h2 id="maptitle">Permission to install: what must happen before the device goes in</h2><span class="hint" id="hint">Hover for a summary · click to open the record · scroll or drag to zoom and pan</span></div>
+  <div class="mapwrap">
+    <div id="map"></div>
+    <div class="mapctl"><button id="zin" type="button" title="Zoom in" aria-label="Zoom in">+</button><button id="zout" type="button" title="Zoom out" aria-label="Zoom out">−</button><button id="zreset" type="button" title="Reset view" aria-label="Reset view">⌂</button></div>
+  </div>
+  <div class="legend" id="legend"></div>
+</section>
+<div class="listcard hidden" id="listcard"><table id="tbl"><thead><tr><th data-s="name">Jurisdiction</th><th data-s="region">Region</th><th data-s="gate">Permission to install</th><th data-s="cert">Product certification</th><th data-s="process">Process</th><th data-s="trig">Conditional trigger</th><th data-s="fcMin">FC min</th><th data-s="ph">pH</th><th data-s="conf">Evidence</th></tr></thead><tbody></tbody></table></div>
+<div class="stats" id="stats"></div>
+<p class="note">Grey land is not yet researched. Sub-national rules for Canada, Australia and the UAE are summarised at country level and listed in each record; the US states level covers all 50 states and the District of Columbia. Small territories are drawn as markers. Water-quality values are for chlorinated fresh-water pools.</p>
 </div>
-</div>
+<aside class="panel" id="panel" role="dialog" aria-label="Jurisdiction record" aria-hidden="true"></aside>
 
 `;
 /* ===================== DATA ===================== */
@@ -275,10 +260,12 @@ var VIEWS = {
 var REGIONS = {world:null,na:[-170,8,-50,74],carib:[-92,8,-58,28],eu:[-12,34,46,72],me:[24,10,66,44],af:[-20,-36,58,38],apac:[60,-48,180,56],latam:[-96,-58,-30,26]};
 
 /* ===================== STATE ===================== */
-var state={view:'gate',level:'world',region:'world',sel:null,q:''};
+var TITLES = {gate:'Permission to install: what must happen before the device goes in',cert:'Product certification: is NSF/ANSI 50 required by law?',process:'Process rules: does the law restrict treatment methods?',fc:'Chlorine floor: the free-chlorine minimum the pool must still hold (mg/L)',conf:'Evidence: the source basis behind each record'};
+var state={view:'gate',level:'world',region:'world',sel:null,q:'',filter:null};
 var map=null, zoom=null, tk={k:1,x:0,y:0};
 var byId={}; J.forEach(function(j){byId[j.id]=j});
 var USAB={}; SUBS.usa.forEach(function(s){USAB[s.id]=s});
+var $=function(id){return document.getElementById(id)};
 
 function cssv(n){return getComputedStyle(document.getElementById('arcm')).getPropertyValue(n).trim()}
 function fcKey(v){ if(v==null) return 'fcna'; if(v<=0.3) return 'fc0'; if(v<=0.5) return 'fc1'; if(v<0.95) return 'fc2'; return 'fc3'; }
@@ -291,15 +278,25 @@ function fills(){
 }
 function fmtFC(j){ if(j.fcMin==null) return '—'; return j.fcMin + (j.fcMax!=null ? '–'+j.fcMax : '+') + ' mg/L'; }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function labelOf(key){ return state.view==='fc' ? VIEWS.fc.desc[key] : (LABELS[state.view]||{})[key] || key; }
+function pool(){ return state.level==='usa' ? SUBS.usa : J; }
+function matches(j,q){ return (j.name+' '+(j.region||'')+' '+j.ahj+' '+(j.id||'')).toLowerCase().indexOf(q)>-1; }
+function isDim(j){
+  var q=state.q.toLowerCase();
+  if(!j) return !!(state.filter||q);
+  if(q && !matches(j,q)) return true;
+  if(state.filter && rawKey(j)!==state.filter) return true;
+  return false;
+}
 
 /* ===================== MAP ===================== */
+var tip=null, vb={w:1000,h:400};
 function buildMap(){
-  var el=document.getElementById('map'); el.innerHTML='';
+  var el=$('map'); el.innerHTML='';
   el.classList.toggle('usa', state.level==='usa');
   var usa = state.level==='usa';
   var data={};
-  if(usa){ SUBS.usa.forEach(function(s){ data[s.id]={fillKey:keyFor(s)}; }); }
-  else { J.forEach(function(j){ data[j.id]={fillKey:keyFor(j)}; }); }
+  pool().forEach(function(j){ data[j.id]={fillKey:keyFor(j)}; });
   map=new Datamap({
     element:el, scope: usa?'usa':'world', responsive:false, fills:fills(), data:data,
     setProjection: usa? undefined : function(element){
@@ -322,8 +319,7 @@ function buildMap(){
       dm.svg.attr('viewBox','0 0 '+vb.w+' '+vb.h).attr('preserveAspectRatio','xMidYMid meet').attr('width',null).attr('height',null);
       dm.svg.selectAll('.datamaps-subunit').on('click',function(geo){ select(geo.id); });
       if(!usa){
-        var bubs=J.filter(function(j){return j.ll}).map(function(j){ return {jid:j.id,name:j.name,latitude:j.ll[0],longitude:j.ll[1],radius:4.2,fillKey:keyFor(j)}; });
-        dm.bubbles(bubs);
+        dm.bubbles(bubbleData());
         dm.svg.selectAll('.datamaps-bubble').on('click',function(d){ d3.event.stopPropagation(); select(d.jid); });
       }
       tip=d3.select(el).append('div').attr('class','tip hoverinfo').attr('role','tooltip').style('display','none');
@@ -331,17 +327,16 @@ function buildMap(){
       var svg=dm.svg;
       zoom=d3.behavior.zoom().scaleExtent([1,14]).on('zoom',function(){ tk={k:d3.event.scale,x:d3.event.translate[0],y:d3.event.translate[1]}; applyT(false); });
       svg.call(zoom).on('dblclick.zoom',null);
-      svg.on('click',function(){ if(d3.event.target.tagName==='svg' || d3.event.target.tagName==='rect'){ } });
       tk={k:1,x:0,y:0}; applyT(false);
       if(!usa && state.region!=='world') focusRegion(state.region,false);
       markSelected();
     }
   });
 }
-var tip=null, vb={w:1000,h:400};
+function bubbleData(){ return J.filter(function(j){return j.ll}).map(function(j){ return {jid:j.id,name:j.name,latitude:j.ll[0],longitude:j.ll[1],radius:4.2,fillKey:keyFor(j)}; }); }
 function showTip(html){ if(!tip) return; tip.html(html).style('display','block'); }
 function moveTip(){
-  if(!tip) return; var el=document.getElementById('map'); var p=d3.mouse(el); var W=el.offsetWidth, H=el.offsetHeight;
+  if(!tip) return; var el=$('map'); var p=d3.mouse(el); var W=el.offsetWidth;
   var flipX = p[0] > W*0.62, flipY = p[1] < 90;
   tip.style('left', p[0]+'px').style('top', p[1]+'px')
      .style('transform', 'translate('+(flipX?'calc(-100% - 14px)':'14px')+','+(flipY?'12px':'calc(-100% - 12px)')+')');
@@ -354,7 +349,7 @@ function clearHover(){
 }
 function bindTips(m){
   var M = m || map; if(!M) return; var usa = state.level==='usa';
-  d3.select(document.getElementById('map')).on('mouseleave.tip',clearHover);
+  d3.select($('map')).on('mouseleave.tip',clearHover);
   M.svg.on('mouseover.sea',function(){ var t=d3.event.target; if(t && t.tagName==='svg') clearHover(); });
   function resetOthers(me){
     M.svg.selectAll('.datamaps-subunit').filter(function(){return this!==me}).style('stroke',null).style('stroke-width',(0.6/tk.k)+'px');
@@ -390,18 +385,14 @@ function focusRegion(rk,anim){
 function zoomBy(f){ var W=vb.w,H=vb.h; var k2=Math.max(1,Math.min(14,tk.k*f)); var r=k2/tk.k; tk={k:k2,x:W/2-(W/2-tk.x)*r,y:H/2-(H/2-tk.y)*r}; applyT(true); }
 function hoverHtml(j,usa){
   var key = rawKey(j);
-  var lab = state.view==='fc' ? VIEWS.fc.desc[key] : (LABELS[state.view]||{})[key] || '';
-  return '<b>'+esc(j.name)+'</b><span class="m">'+esc(lab)+'</span><br><span class="m">FC '+esc(fmtFC(j))+' · pH '+esc(j.ph)+'</span><br>'+esc(j.ahj)+(j.trig?'<br><span class="m">Conditional requirement · see record</span>':'')+'<br><span class="m" style="color:var(--ink-3)">Click '+(usa?'the state':(j.ll?'the marker':'the country'))+' to open its record</span>';
+  return '<b>'+esc(j.name)+'</b><span class="m">'+esc(labelOf(key))+'</span><br><span class="m">FC '+esc(fmtFC(j))+' · pH '+esc(j.ph)+'</span><br>'+esc(j.ahj)+(j.trig?'<br><span class="m">Conditional requirement · see record</span>':'')+'<br><span class="m" style="color:var(--ink-3)">Click '+(usa?'the state':(j.ll?'the marker':'the country'))+' to open its record</span>';
 }
 function recolor(){
   if(!map) return;
-  var data={};
-  if(state.level==='usa'){ SUBS.usa.forEach(function(s){ data[s.id]={fillKey:keyFor(s)}; }); }
-  else { J.forEach(function(j){ data[j.id]={fillKey:keyFor(j)}; }); }
+  var data={}; pool().forEach(function(j){ data[j.id]={fillKey:keyFor(j)}; });
   map.updateChoropleth(data);
   if(state.level==='world'){
-    var bubs=J.filter(function(j){return j.ll}).map(function(j){ return {jid:j.id,name:j.name,latitude:j.ll[0],longitude:j.ll[1],radius:4.2,fillKey:keyFor(j)}; });
-    map.bubbles(bubs);
+    map.bubbles(bubbleData());
     map.svg.selectAll('.datamaps-bubble').on('click',function(d){ d3.event.stopPropagation(); select(d.jid); });
     bindTips();
     applyT(false);
@@ -410,108 +401,181 @@ function recolor(){
 }
 function markSelected(){
   if(!map) return;
-  map.svg.selectAll('.datamaps-subunit').classed('selected',function(g){ return state.sel && g.id===state.sel; });
-  map.svg.selectAll('.datamaps-bubble').classed('selected',function(d){ return state.sel && d.jid===state.sel; });
-  var q=state.q.toLowerCase();
-  map.svg.selectAll('.datamaps-subunit').classed('dim',function(g){
-    if(!q) return false; var j = state.level==='usa'?USAB[g.id]:byId[g.id]; return !(j && matches(j,q));
-  });
+  var usa = state.level==='usa';
+  map.svg.selectAll('.datamaps-subunit')
+    .classed('selected',function(g){ return state.sel && g.id===state.sel; })
+    .classed('dim',function(g){ return isDim(usa?USAB[g.id]:byId[g.id]); });
+  map.svg.selectAll('.datamaps-bubble')
+    .classed('selected',function(d){ return state.sel && d.jid===state.sel; })
+    .classed('dim',function(d){ return isDim(byId[d.jid]); });
 }
-function matches(j,q){ return (j.name+' '+(j.region||'')+' '+j.ahj+' '+(j.id||'')).toLowerCase().indexOf(q)>-1; }
+/* Pan the selected shape clear of the record drawer on wide screens. */
+function ensureVisible(id){
+  if(!map || window.innerWidth<=720) return;
+  var el=$('map'); var node = map.svg.select('.datamaps-subunit.'+id).node();
+  if(!node){ map.svg.selectAll('.datamaps-bubble').each(function(d){ if(d.jid===id) node=this; }); }
+  if(!node) return;
+  var r=node.getBoundingClientRect(); var drawerLeft = window.innerWidth - Math.min(440, window.innerWidth);
+  var limit = drawerLeft - 24;
+  if(r.right > limit){
+    var pxPerVb = el.offsetWidth / vb.w;
+    tk.x -= (r.right - limit + 40) / pxPerVb; applyT(true);
+  }
+}
 
-/* ===================== LEGEND / STATS ===================== */
+/* ===================== LEGEND / STATS / TABS ===================== */
+function counts(){ var c={}; pool().forEach(function(j){ var k=rawKey(j); c[k]=(c[k]||0)+1; }); return c; }
 function renderLegend(){
-  var V=VIEWS[state.view]; var L=document.getElementById('legend'); var pool = state.level==='usa'?SUBS.usa:J;
-  var counts={}; pool.forEach(function(j){ var k=rawKey(j); counts[k]=(counts[k]||0)+1; });
-  L.innerHTML = V.keys.map(function(k){ return '<span><span class="sw" style="background:'+cssv(V.vars[k])+'"></span>'+esc(V.desc[k])+'<span class="n">'+(counts[k]||0)+'</span></span>'; }).join('') + (state.level==='world' ? '<span><span class="sw round" style="background:'+cssv('--ink-3')+'"></span>Marker = small territory</span>' : '') + '<span><span class="sw" style="background:'+cssv('--land-nr')+'"></span>Not researched</span>';
-  document.getElementById('maptitle').textContent = V.title + (state.level==='usa' ? ' (US states)' : '');
-  var S=document.getElementById('stats');
-  var total=pool.length;
-  S.innerHTML = '<div><div class="big mono">'+total+'</div><div class="w">'+(state.level==='usa'?'states researched':'jurisdictions on the map')+'</div></div>' + V.keys.filter(function(k){return counts[k]}).map(function(k){ return '<div><div class="big mono">'+counts[k]+'</div><div class="w"><span class="sw" style="background:'+cssv(V.vars[k])+'"></span>'+esc((LABELS[state.view]||V.desc)[k]||V.desc[k])+'</div></div>'; }).join('');
+  var V=VIEWS[state.view], c=counts();
+  var L=$('legend');
+  L.innerHTML = V.keys.map(function(k){ return '<button type="button" class="lg" data-k="'+k+'" aria-pressed="'+(state.filter===k)+'"><span class="sw" style="background:'+cssv(V.vars[k])+'"></span>'+esc(V.desc[k])+'<span class="n">'+(c[k]||0)+'</span></button>'; }).join('')
+    + (state.level==='world' ? '<span class="static"><span class="sw round" style="background:'+cssv('--ink-3')+'"></span>Marker = small territory</span>' : '')
+    + '<span class="static"><span class="sw" style="background:'+cssv('--land-nr')+'"></span>Not researched</span>'
+    + (state.filter ? '<button type="button" class="clear" id="clearf">Show all</button>' : '');
+  L.querySelectorAll('.lg').forEach(function(b){ b.addEventListener('click',function(){ toggleFilter(b.dataset.k); }); });
+  var cf=$('clearf'); if(cf) cf.addEventListener('click',function(){ toggleFilter(null); });
+  $('maptitle').textContent = TITLES[state.view] + (state.level==='usa' ? ' (US states)' : '');
+  var S=$('stats'); var total=pool().length;
+  S.innerHTML = '<div class="stat total"><div class="big">'+total+'</div><div class="w">'+(state.level==='usa'?'states and DC':'jurisdictions on the map')+'</div></div>'
+    + V.keys.filter(function(k){return c[k]}).map(function(k){ return '<button type="button" class="stat" data-k="'+k+'" aria-pressed="'+(state.filter===k)+'"><div class="big">'+c[k]+'</div><div class="w"><span class="sw" style="background:'+cssv(V.vars[k])+'"></span>'+esc(labelOf(k))+'</div></button>'; }).join('');
+  S.querySelectorAll('.stat[data-k]').forEach(function(b){ b.addEventListener('click',function(){ toggleFilter(b.dataset.k); }); });
+}
+function toggleFilter(k){ state.filter = (k && state.filter!==k) ? k : null; markSelected(); renderLegend(); if(state.level==='list') renderTable(); }
+function setView(v){
+  state.view=v; state.filter=null;
+  document.querySelectorAll('#qtabs .qtab').forEach(function(b){ b.setAttribute('aria-selected', b.dataset.view===v ? 'true':'false'); });
+  recolor(); renderLegend(); if(state.level==='list') renderTable(); renderPanel();
 }
 
-/* ===================== PANEL ===================== */
+/* ===================== RECORD DRAWER ===================== */
 function chip(kind,key){ var v=VIEWS[kind]; var lab=(LABELS[kind]||v.desc)[key]||key; return '<span class="chip" style="--dot:'+cssv(v.vars[key])+'">'+esc(lab)+'</span>'; }
+function openDrawer(){ var P=$('panel'); P.classList.add('open'); P.setAttribute('aria-hidden','false'); P.scrollTop=0; }
+function closeDrawer(){ var P=$('panel'); P.classList.remove('open'); P.setAttribute('aria-hidden','true'); }
 function renderPanel(){
-  var P=document.getElementById('panel');
+  var P=$('panel');
   var j = state.sel ? (state.level==='usa' ? USAB[state.sel] : byId[state.sel]) : null;
-  var stage=document.getElementById('stage');
-  if(!j){ P.innerHTML=''; stage.classList.remove('has-sel'); return; }
-  stage.classList.add('has-sel');
+  if(!j){ closeDrawer(); return; }
   var isSub = state.level==='usa';
-  var head='<div class="ph"><div class="title"><h3>'+esc(j.name)+'</h3><span class="conf">'+esc((j.conf||'verified').toUpperCase())+'</span><button class="close" type="button" aria-label="Close record">×</button></div><span class="region">'+esc(isSub?'United States · state':j.region)+' · AHJ: '+esc(j.ahj)+'</span><div class="chips">'+chip('gate',j.gate)+chip('cert',j.cert||'req')+(j.process?chip('process',j.process):'')+(j.trig?'<span class="chip" style="--dot:var(--g-approve)">Conditional</span>':'')+'</div></div>';
+  var head='<div class="ph"><div class="title"><div><h3>'+esc(j.name)+'</h3><div class="region">'+esc(isSub?'United States · state':j.region)+' · '+esc(j.ahj)+' · <span class="conf">'+esc((j.conf||'verified').toUpperCase())+'</span></div></div><button class="close" type="button" aria-label="Close record">×</button></div><div class="chips">'+chip('gate',j.gate)+chip('cert',j.cert||'req')+(j.process?chip('process',j.process):'')+(j.trig?'<span class="chip" style="--dot:var(--g-approve)">Conditional</span>':'')+'</div></div>';
   var wq='<span class="mono">FC '+esc(fmtFC(j))+' · pH '+esc(j.ph)+'</span>';
   var rows;
   if(isSub){
-    rows='<div class="rows"><div class="k">Water</div><div class="v">'+wq+'</div><div class="k">Rule</div><div class="v">'+esc(j.t)+'</div>'+(j.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(j.trig)+'</div>':'')+'<div class="k path">Card</div><div class="v path"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+j.card+'">Open the full record in the compliance map</a></div></div>';
+    rows='<div class="rows"><div class="k">Water</div><div class="v">'+wq+'</div><div class="k">Rule</div><div class="v">'+esc(j.t)+'</div>'+(j.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(j.trig)+'</div>':'')+'<div class="k path">Record</div><div class="v path"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+j.card+'">Open the full record in the compliance map</a></div></div>';
   } else {
-    rows='<div class="rows"><div class="k">Water</div><div class="v">'+wq+'</div><div class="k">Product</div><div class="v">'+esc(j.cert_t)+'</div><div class="k">Process</div><div class="v">'+esc(j.proc_t)+'</div>'+(j.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(j.trig)+'</div>':'')+'<div class="k">Install</div><div class="v">'+esc(j.inst_t)+'</div><div class="k path">Path</div><div class="v path">'+esc(j.path)+'</div><div class="k">Source</div><div class="v"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+j.card+'">Full record and citations</a></div></div>';
+    rows='<div class="rows"><div class="k">Water</div><div class="v">'+wq+'</div><div class="k">Product</div><div class="v">'+esc(j.cert_t)+'</div><div class="k">Process</div><div class="v">'+esc(j.proc_t)+'</div>'+(j.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(j.trig)+'</div>':'')+'<div class="k">Install</div><div class="v">'+esc(j.inst_t)+'</div><div class="k path">In practice</div><div class="v path">'+esc(j.path)+'</div><div class="k">Source</div><div class="v"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+j.card+'">Full record and citations</a></div></div>';
   }
   var subs='';
   if(!isSub && j.subs && SUBS[j.subs]){
-    subs='<div class="subs"><span class="eyebrow">Sub-national rules'+(j.subs==='usa'?' · all 50 states + DC':'')+'</span>'+SUBS[j.subs].slice().sort(function(a,b){return a.name<b.name?-1:1}).map(function(s){ return '<button class="sub" data-sub="'+j.subs+'" data-id="'+s.id+'"><span><span class="chip" style="--dot:'+cssv(VIEWS.gate.vars[s.gate])+'">'+esc(LABELS.gate[s.gate])+'</span> <span class="nm">'+esc(s.name)+'</span></span><span class="fc mono">FC ≥'+s.fcMin+'</span></button>'; }).join('')+'</div>';
+    subs='<div class="subs"><span class="lab">Sub-national rules'+(j.subs==='usa'?' · all 50 states + DC':'')+'</span>'+SUBS[j.subs].slice().sort(function(a,b){return a.name<b.name?-1:1}).map(function(s){ return '<button type="button" class="sub" data-sub="'+j.subs+'" data-id="'+s.id+'"><span><span class="chip" style="--dot:'+cssv(VIEWS.gate.vars[s.gate])+'">'+esc(LABELS.gate[s.gate])+'</span> <span class="nm">'+esc(s.name)+'</span></span><span class="fc mono">FC ≥'+s.fcMin+'</span></button>'; }).join('')+'</div>';
   }
   P.innerHTML=head+rows+subs;
   P.querySelector('.close').addEventListener('click',closeRecord);
-  if(window.innerWidth<=980){ P.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'}); }
   P.querySelectorAll('.sub').forEach(function(b){ b.addEventListener('click',function(){
     var s=SUBS[b.dataset.sub].filter(function(x){return x.id===b.dataset.id})[0];
     if(b.dataset.sub==='usa'){ setLevel('usa'); select(s.id); }
     else { renderSubPanel(j,s); }
   })});
+  openDrawer();
 }
 function renderSubPanel(parent,s){
-  var P=document.getElementById('panel');
-  P.innerHTML='<div class="ph"><div class="title"><h3>'+esc(s.name)+'</h3><span class="conf">'+esc(parent.name.toUpperCase())+'</span><button class="close" type="button" aria-label="Close record">×</button></div><span class="region">AHJ: '+esc(s.ahj)+'</span><div class="chips">'+chip('gate',s.gate)+chip('cert',s.cert)+'</div></div><div class="rows"><div class="k">Water</div><div class="v"><span class="mono">FC ≥'+s.fcMin+' mg/L · pH '+esc(s.ph)+'</span></div><div class="k">Rule</div><div class="v">'+esc(s.t)+'</div>'+(s.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(s.trig)+'</div>':'')+'<div class="k path">Card</div><div class="v path"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+s.card+'">Open the full record</a></div></div><div class="subs"><button class="sub" id="backbtn"><span class="nm">← Back to '+esc(parent.name)+'</span></button></div>';
-  document.getElementById('backbtn').addEventListener('click',renderPanel);
+  var P=$('panel');
+  P.innerHTML='<div class="ph"><div class="title"><div><h3>'+esc(s.name)+'</h3><div class="region">'+esc(parent.name)+' · '+esc(s.ahj)+'</div></div><button class="close" type="button" aria-label="Close record">×</button></div><div class="chips">'+chip('gate',s.gate)+chip('cert',s.cert)+'</div></div><div class="rows"><div class="k">Water</div><div class="v"><span class="mono">FC ≥'+s.fcMin+' mg/L · pH '+esc(s.ph)+'</span></div><div class="k">Rule</div><div class="v">'+esc(s.t)+'</div>'+(s.trig?'<div class="k">Trigger</div><div class="v"><b>Conditional:</b> '+esc(s.trig)+'</div>':'')+'<div class="k path">Record</div><div class="v path"><a href="https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html#'+s.card+'">Open the full record</a></div></div><div class="subs"><button type="button" class="sub" id="backbtn"><span class="nm">← Back to '+esc(parent.name)+'</span></button></div>';
+  $('backbtn').addEventListener('click',renderPanel);
   P.querySelector('.close').addEventListener('click',closeRecord);
+  openDrawer();
 }
 function closeRecord(){ state.sel=null; markSelected(); renderPanel(); }
-function select(id){ state.sel = (state.sel===id && state.level!=='usa') ? null : id; markSelected(); renderPanel(); }
+function select(id){
+  state.sel = (state.sel===id && state.level!=='usa') ? null : id;
+  markSelected(); renderPanel();
+  if(state.sel) ensureVisible(state.sel);
+}
+
+/* ===================== SEARCH ===================== */
+var resIdx=-1;
+function searchPool(){
+  var q=state.q.toLowerCase(); if(!q) return [];
+  var out=[];
+  if(state.level==='usa'){ SUBS.usa.forEach(function(s){ if(matches(s,q)) out.push({kind:'state',j:s}); }); }
+  else {
+    J.forEach(function(j){ if(matches(j,q)) out.push({kind:'world',j:j}); });
+    SUBS.usa.forEach(function(s){ if(matches(s,q)) out.push({kind:'state',j:s}); });
+  }
+  return out.slice(0,8);
+}
+function renderResults(){
+  var R=$('results'), inp=$('q'); var list=searchPool();
+  if(!state.q){ R.classList.remove('open'); R.innerHTML=''; inp.setAttribute('aria-expanded','false'); resIdx=-1; return; }
+  if(!list.length){ R.innerHTML='<div class="res none">No match. Try a country, US state or agency name.</div>'; }
+  else {
+    R.innerHTML=list.map(function(r,i){ var j=r.j; var key=rawKey(j); var v=VIEWS[state.view]; return '<button type="button" class="res'+(i===resIdx?' active':'')+'" data-i="'+i+'"><span class="rn">'+esc(j.name)+'</span><span class="rr">'+esc(r.kind==='state'?'United States · state':j.region)+'</span><span class="chip" style="--dot:'+cssv(v.vars[key])+'">'+esc(labelOf(key))+'</span></button>'; }).join('');
+    R.querySelectorAll('.res').forEach(function(b){ b.addEventListener('mousedown',function(e){ e.preventDefault(); pickResult(list[+b.dataset.i]); }); });
+  }
+  R.classList.add('open'); inp.setAttribute('aria-expanded','true');
+}
+function pickResult(r){
+  if(!r) return;
+  state.q=''; $('q').value=''; renderResults();
+  if(r.kind==='state'){ if(state.level!=='usa') setLevel('usa'); select(r.j.id); }
+  else { if(state.level!=='world') setLevel('world'); select(r.j.id); }
+  markSelected();
+}
+(function(){
+  var inp=$('q');
+  inp.addEventListener('input',function(){ state.q=inp.value.trim(); resIdx=-1; renderResults(); markSelected(); if(state.level==='list') renderTable(); });
+  inp.addEventListener('keydown',function(e){
+    var list=searchPool();
+    if(e.key==='ArrowDown'){ e.preventDefault(); resIdx=Math.min(list.length-1,resIdx+1); renderResults(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); resIdx=Math.max(0,resIdx-1); renderResults(); }
+    else if(e.key==='Enter'){ e.preventDefault(); pickResult(list[resIdx<0?0:resIdx]); }
+    else if(e.key==='Escape'){ state.q=''; inp.value=''; renderResults(); markSelected(); inp.blur(); }
+  });
+  inp.addEventListener('focus',function(){ if(state.q) renderResults(); });
+  document.addEventListener('click',function(e){ if(!e.target.closest('.search')){ $('results').classList.remove('open'); inp.setAttribute('aria-expanded','false'); } });
+})();
 
 /* ===================== TABLE ===================== */
 var sortKey='name', sortDir=1;
 function renderTable(){
-  var tb=document.querySelector('#tbl tbody'); var q=state.q.toLowerCase();
-  var rows=J.filter(function(j){return !q||matches(j,q)}).slice().sort(function(a,b){ var x=a[sortKey],y=b[sortKey]; var xn=(x==null||x==='—'), yn=(y==null||y==='—'); if(xn&&yn) return 0; if(xn) return 1; if(yn) return -1; return (x>y?1:x<y?-1:0)*sortDir; });
+  var tb=document.querySelector('#tbl tbody');
+  var rows=J.filter(function(j){return !isDim(j)}).slice().sort(function(a,b){ var x=a[sortKey],y=b[sortKey]; var xn=(x==null||x==='—'), yn=(y==null||y==='—'); if(xn&&yn) return 0; if(xn) return 1; if(yn) return -1; return (x>y?1:x<y?-1:0)*sortDir; });
   tb.innerHTML=rows.map(function(j){ return '<tr><td class="n" data-id="'+j.id+'">'+esc(j.name)+'</td><td>'+esc(j.region)+'</td><td><span class="dot" style="background:'+cssv(VIEWS.gate.vars[j.gate])+'"></span>'+esc(LABELS.gate[j.gate])+'</td><td><span class="dot" style="background:'+cssv(VIEWS.cert.vars[j.cert])+'"></span>'+esc(LABELS.cert[j.cert])+'</td><td><span class="dot" style="background:'+cssv(VIEWS.process.vars[j.process])+'"></span>'+esc(LABELS.process[j.process])+'</td><td style="max-width:260px">'+(j.trig?'<b>Conditional:</b> '+esc(j.trig):'—')+'</td><td class="mono">'+esc(fmtFC(j))+'</td><td class="mono">'+esc(j.ph)+'</td><td><span class="dot" style="background:'+cssv(VIEWS.conf.vars[j.conf])+'"></span>'+esc(LABELS.conf[j.conf])+'</td></tr>'; }).join('');
   tb.querySelectorAll('td.n').forEach(function(td){ td.addEventListener('click',function(){ state.sel=td.dataset.id; renderPanel(); }); });
 }
 document.querySelectorAll('#tbl th').forEach(function(th){ th.addEventListener('click',function(){ var k=th.dataset.s; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;} renderTable(); }); });
 
-/* ===================== CONTROLS ===================== */
-function press(group,attr,val){ document.querySelectorAll(group+' button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset[attr]===val?'true':'false'); }); }
+/* ===================== LEVEL / FOCUS / CONTROLS ===================== */
 function setLevel(l){
-  state.level=l; press('[aria-label="Map level"]','level',l);
-  document.getElementById('mapcard').classList.toggle('hidden', l==='list');
-  document.getElementById('listcard').classList.toggle('hidden', l!=='list');
-  document.getElementById('regiongroup').style.visibility = l==='world'?'visible':'hidden';
+  state.level=l; state.filter=null;
+  document.querySelectorAll('[aria-label="Map level"] button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.level===l?'true':'false'); });
+  $('mapcard').classList.toggle('hidden', l==='list');
+  $('listcard').classList.toggle('hidden', l!=='list');
+  $('focuswrap').style.visibility = l==='world' ? 'visible' : 'hidden';
+  $('hint').textContent = l==='list' ? 'Click a column heading to sort · click a name to open the record' : 'Hover for a summary · click to open the record · scroll or drag to zoom and pan';
   if(l==='list'){ renderTable(); renderLegend(); }
   else { state.sel = (l==='usa' && !USAB[state.sel]) ? null : (l==='world' && USAB[state.sel] ? 'USA' : state.sel); buildMap(); renderLegend(); }
   renderPanel();
 }
-document.querySelectorAll('[aria-label="Metric"] button').forEach(function(b){ b.addEventListener('click',function(){ state.view=b.dataset.view; press('[aria-label="Metric"]','view',state.view); recolor(); renderLegend(); if(state.level==='list') renderTable(); renderPanel(); }); });
+document.querySelectorAll('#qtabs .qtab').forEach(function(b){ b.addEventListener('click',function(){ setView(b.dataset.view); }); });
 document.querySelectorAll('[aria-label="Map level"] button').forEach(function(b){ b.addEventListener('click',function(){ setLevel(b.dataset.level); }); });
-document.querySelectorAll('[aria-label="Region focus"] button').forEach(function(b){ b.addEventListener('click',function(){ state.region=b.dataset.region; press('[aria-label="Region focus"]','region',state.region); if(state.level==='world') focusRegion(state.region,true); }); });
+$('focus').addEventListener('change',function(){ state.region=this.value; if(state.level==='world') focusRegion(state.region,true); });
+$('zin').addEventListener('click',function(){zoomBy(1.6)});
+$('zout').addEventListener('click',function(){zoomBy(1/1.6)});
+$('zreset').addEventListener('click',function(){ state.region='world'; $('focus').value='world'; tk={k:1,x:0,y:0}; applyT(true); });
 (function(){
-  var btn=document.getElementById('helpbtn'), box=document.getElementById('help');
+  var btn=$('helpbtn'), box=$('help');
   function setHelp(open){ box.hidden=!open; btn.setAttribute('aria-expanded', open?'true':'false'); }
   btn.addEventListener('click',function(e){ e.stopPropagation(); setHelp(box.hidden); });
   document.addEventListener('click',function(e){ if(!box.hidden && !box.contains(e.target)) setHelp(false); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ setHelp(false); if(state.sel){ closeRecord(); } } });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ setHelp(false); if(state.sel && document.activeElement!==$('q')){ closeRecord(); } } });
 })();
-document.getElementById('zin').addEventListener('click',function(){zoomBy(1.6)});
-document.getElementById('zout').addEventListener('click',function(){zoomBy(1/1.6)});
-document.getElementById('zreset').addEventListener('click',function(){ state.region='world'; press('[aria-label="Region focus"]','region','world'); tk={k:1,x:0,y:0}; applyT(true); });
-document.getElementById('q').addEventListener('input',function(e){ state.q=e.target.value.trim(); markSelected(); if(state.level==='list') renderTable(); var q=state.q.toLowerCase(); if(q){ var hit=J.filter(function(j){return matches(j,q)}); if(hit.length===1){ state.sel=hit[0].id; markSelected(); renderPanel(); } } });
-
 var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(function(){ if(state.level!=='list'){ buildMap(); } },200); });
 var mq=window.matchMedia('(prefers-color-scheme: dark)'); if(mq.addEventListener) mq.addEventListener('change',function(){ if(state.level!=='list') buildMap(); renderLegend(); renderPanel(); });
 new MutationObserver(function(){ if(state.level!=='list') buildMap(); renderLegend(); renderPanel(); }).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 
 /* ===================== BOOT ===================== */
 (function boot(){
-  if(typeof Datamap==='undefined'){ document.getElementById('map').innerHTML='<p style="padding:24px;color:var(--ink-2)">The map library did not load. The table view still works.</p>'; setLevel('list'); return; }
+  if(typeof Datamap==='undefined'){ $('map').innerHTML='<p style="padding:24px;color:var(--ink-2)">The map library did not load. The table view still works.</p>'; setLevel('list'); return; }
   buildMap(); renderLegend(); renderPanel();
 })();
 })();
