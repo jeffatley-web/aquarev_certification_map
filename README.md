@@ -1,13 +1,19 @@
-# AquaRev Certification Map — Deployment
+# AquaRev Certification pages — Deployment
 
-Lives at **www.aquarevwater.us/certificationmap** (Webflow). Same split-deploy
-pattern as the Data and Water Hardness pages: CSS + JS hosted on GitHub Pages,
-a short embed pasted into Webflow. The block paints its own background and
-every style is scoped to `#arcm`, so Webflow's global styles do not reach it.
+Two pages on **aquarevwater.us** (Webflow), same split-deploy pattern as the Data
+and Water Hardness pages: CSS + JS hosted on GitHub Pages, a short embed pasted
+into each Webflow page. Each block paints its own background and every style is
+scoped to its container, so Webflow's global styles do not reach it.
 
-The page is the interactive **Compliance Atlas** (world map, US-states map,
-table). It links to the full **Global Compliance Map** document, which is hosted
-as a standalone page on the same GitHub Pages repo.
+| Page | Slug | Container | Files |
+|---|---|---|---|
+| Compliance Atlas (interactive map) | `/certificationmap` | `#arcm` | `certification-map.css`, `certification-map.js`, `webflow-embed-certification-map.html` |
+| Global Compliance Map (document) | `/compliancemap` | `#arcd` | `compliance-map.css`, `compliance-map.js`, `webflow-embed-compliance-map.html` |
+
+The atlas links to the document page (and deep-links into its cards, e.g.
+`/compliancemap#fr`); the document links back to the atlas from its masthead.
+If either slug changes, edit `SITE_MAP` / `SITE_DOC` at the top of `build.sh`,
+rebuild and push.
 
 ## Masters (edit these, never the generated files)
 
@@ -19,37 +25,37 @@ as a standalone page on the same GitHub Pages repo.
 
 ## Generated files (this folder)
 
-| File | Role |
-|---|---|
-| `certification-map.css` | Hosted on GitHub Pages. Atlas styles, every selector scoped under `#arcm`; palette tokens on `#arcm`, dark forced by `data-theme="dark"`. |
-| `certification-map.js` | Hosted on GitHub Pages. Injects the atlas markup into `<div id="arcm">`, then holds the 70-jurisdiction and 51-state datasets and all logic. |
-| `compliance-map.html` | Hosted on GitHub Pages. The full document as a standalone page; the atlas records link into its anchors. |
-| `webflow-embed-certification-map.html` | Paste into the Webflow Embed element (under 1 KB). |
-| `preview.html` | Local preview that mirrors the embed with local files. |
-| `build.sh` | Regenerates all of the above from the masters. |
+`build.sh` regenerates everything below from the masters. Each JS file injects
+its page markup into the empty container, then runs the page logic. The
+datasets (70 jurisdictions, 51 US states) live in `certification-map.js`.
 
 Map geometry comes from `datamaps.all.min.js` on cdnjs (world and US-state
-topology); d3 v3.5.17 and topojson v1.6.9 also load from cdnjs. Nothing else is
-fetched at runtime.
+topology); d3 v3.5.17 and topojson v1.6.9 also load from cdnjs. The document
+page loads nothing but its own CSS/JS and Google Fonts.
+
+`preview.html` and `preview-doc.html` mirror the two embeds with local files.
 
 ## GitHub Pages
 
 - Repo: `jeffatley-web/aquarev_certification_map` (public), Pages source `main` branch, root.
 - https://jeffatley-web.github.io/aquarev_certification_map/certification-map.css
 - https://jeffatley-web.github.io/aquarev_certification_map/certification-map.js
-- https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.html
+- https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.css
+- https://jeffatley-web.github.io/aquarev_certification_map/compliance-map.js
 
 ## Webflow page notes
 
-- Drop an Embed element into a full-width section on `/certificationmap` and
-  paste the contents of `webflow-embed-certification-map.html`. Publish.
-- Give the section a dark background (`#0E171E` matches the block) or let the
+- On each page, drop an Embed element into a full-width section and paste the
+  matching `webflow-embed-*.html`. Publish.
+- Give the section a dark background (`#0E171E` matches both blocks) or let the
   block paint itself; either works.
-- If the site has a fixed nav, add this to the page's custom code head so the
-  sticky toolbar and record panel sit below it rather than under it:
-  `<style>#arcm{--arcm-sticky-top:72px}</style>` (use the nav's real height).
+- If the site has a fixed nav, add this to each page's custom code head so the
+  sticky bars and the record drawer sit below it rather than under it:
+  `<style>#arcm{--arcm-sticky-top:72px}</style>` on the atlas page and
+  `<style>#arcd{--arcd-sticky-top:72px}</style>` on the document page (use the
+  nav's real height).
 - Fonts (Archivo, Source Sans 3, IBM Plex Mono) load from Google Fonts via the
-  first `<link>` in the embed. If those families are already in Webflow's font
+  first `<link>` in each embed. If those families are already in Webflow's font
   settings, that line can be removed.
 
 ## Update workflow
@@ -62,26 +68,27 @@ fetched at runtime.
    ./build.sh
    ```
 
-3. Commit and push the generated files to the GitHub Pages repo:
+3. Commit and push the generated files:
 
    ```bash
    cd "/Users/jatley/Documents/Jeff Atley/Aquarev Water /Marketing/Website/Certification Map"
-   git add certification-map.css certification-map.js compliance-map.html README.md build.sh webflow-embed-certification-map.html preview.html
-   git commit -m "Update certification map"
+   git add -A
+   git commit -m "Update certification pages"
    git push
    ```
 
-4. The embed does not change unless the hosted URLs move. `build.sh` stamps a
-   fresh `?v=` cache buster into the embed each run; re-paste it into Webflow
-   when you want browsers to pick up a change immediately.
+4. `build.sh` stamps a fresh `?v=` cache buster into both embeds each run.
+   Re-paste an embed into Webflow when you want browsers to pick up a change
+   immediately; otherwise the GitHub Pages cache refreshes within about ten
+   minutes on its own.
 
 The published Claude artifact versions (light and dark themes) are the visual
 reference: atlas https://claude.ai/artifact/MJug8Z6Be3f7m8a4jhPTup and
 document https://claude.ai/artifact/5e3h82FST3RaScjGqJqVT9.
 
-## Before publishing the Webflow page live
+## Before publishing the Webflow pages live
 
 The internal open-items list is in
 `Marketing/Collateral/Certification/Research/00_INTERNAL_Open_Items.md` and is
-not part of any published file. Close or accept those items before the page
-goes live.
+not part of any published file. Close or accept those items before the pages
+go live.
