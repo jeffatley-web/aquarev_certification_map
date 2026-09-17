@@ -63,6 +63,14 @@ root.innerHTML=`
 <aside class="panel" id="panel" role="dialog" aria-label="Jurisdiction record" aria-hidden="true"></aside>
 
 `;
+(function(){
+  function navOffset(){
+    var nav=document.querySelector('.w-nav, nav'); var h=0;
+    if(nav){ var cs=getComputedStyle(nav); if(cs.position==='sticky'||cs.position==='fixed'){ h=Math.round(nav.getBoundingClientRect().height); } }
+    root.style.setProperty('--arcm-sticky-top', h+'px');
+  }
+  navOffset(); window.addEventListener('resize', navOffset); window.addEventListener('load', navOffset);
+})();
 /* ===================== DATA ===================== */
 // gate: none|notify|approve · cert: req|none|advised · process: closed|clause|silent · conf: verified|secondary|inferred
 var J = [

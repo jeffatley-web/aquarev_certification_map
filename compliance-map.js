@@ -889,6 +889,14 @@ root.innerHTML=`
 
 `;
 (function(){
+  function navOffset(){
+    var nav=document.querySelector('.w-nav, nav'); var h=0;
+    if(nav){ var cs=getComputedStyle(nav); if(cs.position==='sticky'||cs.position==='fixed'){ h=Math.round(nav.getBoundingClientRect().height); } }
+    root.style.setProperty('--arcd-sticky-top', h+'px');
+  }
+  navOffset(); window.addEventListener('resize', navOffset); window.addEventListener('load', navOffset);
+})();
+(function(){
   var cards=[].slice.call(document.querySelectorAll('.card'));
   var q=document.getElementById('q'), count=document.getElementById('count');
   var btns=[].slice.call(document.querySelectorAll('.controls button'));
