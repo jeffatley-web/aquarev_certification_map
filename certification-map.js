@@ -20,7 +20,7 @@ root.innerHTML=`
   <button class="qtab" role="tab" data-view="conf" aria-selected="false"><span class="l">Evidence</span><span class="d">How solid is each finding?</span></button>
 </nav>
 
-<section class="mapcard" id="mapcard">
+<div class="controls" id="controls">
   <div class="mapbar">
     <div class="seg" role="group" aria-label="Map level"><button type="button" data-level="world" aria-pressed="true">World</button><button type="button" data-level="usa" aria-pressed="false">US states</button><button type="button" data-level="list" aria-pressed="false">Table</button></div>
     <label class="focus" id="focuswrap"><span class="lab">Focus</span><span class="sel"><select id="focus" aria-label="Region focus"><option value="world">Whole world</option><option value="na">North America</option><option value="carib">Caribbean</option><option value="eu">Europe</option><option value="me">Middle East</option><option value="af">Africa</option><option value="apac">Asia-Pacific</option><option value="latam">Latin America</option></select></span></label>
@@ -44,14 +44,19 @@ root.innerHTML=`
     </ul>
     <div class="foot">Sixty jurisdictions plus all 50 US states and DC, researched September 2026. Grey land is not yet researched. Not legal advice.</div>
   </div>
+</div>
+<section class="mapcard" id="mapcard">
   <div class="maptitle"><h2 id="maptitle">Permission to install: what must happen before the device goes in</h2><span class="hint" id="hint">Hover for a summary · click to open the record · scroll or drag to zoom and pan</span></div>
   <div class="mapwrap">
     <div id="map"></div>
     <div class="mapctl"><button id="zin" type="button" title="Zoom in" aria-label="Zoom in">+</button><button id="zout" type="button" title="Zoom out" aria-label="Zoom out">−</button><button id="zreset" type="button" title="Reset view" aria-label="Reset view">⌂</button></div>
   </div>
-  <div class="legend" id="legend"></div>
 </section>
-<div class="listcard hidden" id="listcard"><table id="tbl"><thead><tr><th data-s="name">Jurisdiction</th><th data-s="region">Region</th><th data-s="gate">Permission to install</th><th data-s="cert">Product certification</th><th data-s="process">Process</th><th data-s="trig">Conditional trigger</th><th data-s="fcMin">FC min</th><th data-s="ph">pH</th><th data-s="conf">Evidence</th></tr></thead><tbody></tbody></table></div>
+<section class="listcard hidden" id="listcard">
+  <div class="maptitle"><h2 id="listtitle">Permission to install: what must happen before the device goes in</h2><span class="hint" id="listhint">Click a column heading to sort · click a name to open the record</span><span class="count" id="listcount"></span></div>
+  <div class="tablewrap"><table id="tbl"><thead><tr><th data-s="name">Jurisdiction</th><th data-s="region">Region</th><th data-s="gate">Permission to install</th><th data-s="cert">Product certification</th><th data-s="process">Process</th><th data-s="trig">Conditional trigger</th><th data-s="fcMin">FC min</th><th data-s="ph">pH</th><th data-s="conf">Evidence</th></tr></thead><tbody></tbody></table></div>
+</section>
+<div class="legend" id="legend"></div>
 <div class="stats" id="stats"></div>
 <p class="note">Grey land is not yet researched. Sub-national rules for Canada, Australia and the UAE are summarised at country level and listed in each record; the US states level covers all 50 states and the District of Columbia. Small territories are drawn as markers. Water-quality values are for chlorinated fresh-water pools.</p>
 </div>
@@ -317,11 +322,8 @@ function buildMap(){
     done:function(dm){
       vb={w:el.offsetWidth,h:el.offsetHeight};
       dm.svg.attr('viewBox','0 0 '+vb.w+' '+vb.h).attr('preserveAspectRatio','xMidYMid meet').attr('width',null).attr('height',null);
-      dm.svg.selectAll('.datamaps-subunit').on('click',function(geo){ select(geo.id); });
-      if(!usa){
-        dm.bubbles(bubbleData());
-        dm.svg.selectAll('.datamaps-bubble').on('click',function(d){ d3.event.stopPropagation(); select(d.jid); });
-      }
+      if(!usa){ dm.bubbles(bubbleData()); }
+      bindSelect(dm);
       tip=d3.select(el).append('div').attr('class','tip hoverinfo').attr('role','tooltip').style('display','none');
       bindTips(dm);
       var svg=dm.svg;
@@ -333,7 +335,41 @@ function buildMap(){
     }
   });
 }
-function bubbleData(){ return J.filter(function(j){return j.ll}).map(function(j){ return {jid:j.id,name:j.name,latitude:j.ll[0],longitude:j.ll[1],radius:4.2,fillKey:keyFor(j)}; }); }
+function bubbleData(){ return J.filter(function(j){return j.ll}).map(function(j){ return {jid:j.id,name:j.name,latitude:j.ll[0],longitude:j.ll[1],radius:5.5,fillKey:keyFor(j)}; }); }
+/* Select on press-and-release within a small tolerance. The drag-to-pan behaviour cancels the
+   browser's click event whenever the pointer moves at all between press and release, so a plain
+   click handler misses many real clicks; this does not. Works for mouse and touch. */
+var pressPt=null;
+function bindSelect(M){
+  var svg=M.svg, svgNode=svg.node();
+  function pt(e){ return (e.changedTouches&&e.changedTouches[0])||(e.touches&&e.touches[0])||e; }
+  /* Hit-test the release point: mouse events on an SVG are not always delivered to the shape itself. */
+  function hit(x,y){
+    /* A marker within 12px of the release point wins over the country under it. */
+    var best=null, bestD=144;
+    svg.selectAll('.datamaps-bubble').each(function(d){ var b=this.getBoundingClientRect(); var cx=b.left+b.width/2, cy=b.top+b.height/2; var dd=(cx-x)*(cx-x)+(cy-y)*(cy-y); if(dd<bestD){ bestD=dd; best=d.jid; } });
+    if(best) return best;
+    var el=document.elementFromPoint(x,y);
+    while(el && el!==svgNode && el!==document.body){
+      if(el.classList){
+        if(el.classList.contains('datamaps-subunit')){ var g=d3.select(el).datum(); return g&&g.id; }
+        if(el.classList.contains('datamaps-bubble')){ var b=d3.select(el).datum(); return b&&b.jid; }
+      }
+      el=el.parentNode;
+    }
+    return null;
+  }
+  function press(){ var p=pt(d3.event); pressPt={x:p.clientX,y:p.clientY}; }
+  function release(){
+    var e=d3.event, p=pt(e);
+    if(!pressPt) return; var dx=p.clientX-pressPt.x, dy=p.clientY-pressPt.y; pressPt=null;
+    if(dx*dx+dy*dy>64) return;
+    var id=hit(p.clientX,p.clientY); if(!id) return;
+    if(e.type==='touchend' && e.cancelable) e.preventDefault();
+    select(id);
+  }
+  svg.on('mousedown.sel',press).on('touchstart.sel',press).on('mouseup.sel',release).on('touchend.sel',release);
+}
 function showTip(html){ if(!tip) return; tip.html(html).style('display','block'); }
 function moveTip(){
   if(!tip) return; var el=$('map'); var p=d3.mouse(el); var W=el.offsetWidth;
@@ -370,7 +406,7 @@ function applyT(anim){
   var t='translate('+tk.x+','+tk.y+') scale('+tk.k+')';
   (anim && !window.matchMedia('(prefers-reduced-motion: reduce)').matches ? g.transition().duration(500) : g).attr('transform',t);
   map.svg.selectAll('.datamaps-subunit').style('stroke-width',(0.6/tk.k)+'px');
-  map.svg.selectAll('.datamaps-bubble').attr('r', 4.2/Math.sqrt(tk.k)).style('stroke-width',(1.2/tk.k)+'px');
+  map.svg.selectAll('.datamaps-bubble').attr('r', 5.5/Math.sqrt(tk.k)).style('stroke-width',(1.2/tk.k)+'px');
   if(zoom){ zoom.scale(tk.k).translate([tk.x,tk.y]); }
 }
 function focusRegion(rk,anim){
@@ -393,7 +429,7 @@ function recolor(){
   map.updateChoropleth(data);
   if(state.level==='world'){
     map.bubbles(bubbleData());
-    map.svg.selectAll('.datamaps-bubble').on('click',function(d){ d3.event.stopPropagation(); select(d.jid); });
+    bindSelect(map);
     bindTips();
     applyT(false);
   }
@@ -409,9 +445,10 @@ function markSelected(){
     .classed('selected',function(d){ return state.sel && d.jid===state.sel; })
     .classed('dim',function(d){ return isDim(byId[d.jid]); });
 }
-/* Pan the selected shape clear of the record drawer on wide screens. */
+/* Pan the selected shape clear of the record drawer when the drawer overlays the map
+   (window narrower than 1100px). On wider screens the layout makes room for the drawer instead. */
 function ensureVisible(id){
-  if(!map || window.innerWidth<=720) return;
+  if(!map || window.innerWidth<=720 || window.innerWidth>=1100) return;
   var el=$('map'); var node = map.svg.select('.datamaps-subunit.'+id).node();
   if(!node){ map.svg.selectAll('.datamaps-bubble').each(function(d){ if(d.jid===id) node=this; }); }
   if(!node) return;
@@ -424,7 +461,6 @@ function ensureVisible(id){
 }
 
 /* ===================== LEGEND / STATS / TABS ===================== */
-function counts(){ var c={}; pool().forEach(function(j){ var k=rawKey(j); c[k]=(c[k]||0)+1; }); return c; }
 function renderLegend(){
   var V=VIEWS[state.view], c=counts();
   var L=$('legend');
@@ -435,12 +471,14 @@ function renderLegend(){
   L.querySelectorAll('.lg').forEach(function(b){ b.addEventListener('click',function(){ toggleFilter(b.dataset.k); }); });
   var cf=$('clearf'); if(cf) cf.addEventListener('click',function(){ toggleFilter(null); });
   $('maptitle').textContent = TITLES[state.view] + (state.level==='usa' ? ' (US states)' : '');
-  var S=$('stats'); var total=pool().length;
-  S.innerHTML = '<div class="stat total"><div class="big">'+total+'</div><div class="w">'+(state.level==='usa'?'states and DC':'jurisdictions on the map')+'</div></div>'
+  $('listtitle').textContent = TITLES[state.view] + ' (table)';
+  var S=$('stats'); var total=(state.level==='list'?J:pool()).length;
+  S.innerHTML = '<div class="stat total"><div class="big">'+total+'</div><div class="w">'+(state.level==='usa'?'states and DC':(state.level==='list'?'jurisdictions in the table':'jurisdictions on the map'))+'</div></div>'
     + V.keys.filter(function(k){return c[k]}).map(function(k){ return '<button type="button" class="stat" data-k="'+k+'" aria-pressed="'+(state.filter===k)+'"><div class="big">'+c[k]+'</div><div class="w"><span class="sw" style="background:'+cssv(V.vars[k])+'"></span>'+esc(labelOf(k))+'</div></button>'; }).join('');
   S.querySelectorAll('.stat[data-k]').forEach(function(b){ b.addEventListener('click',function(){ toggleFilter(b.dataset.k); }); });
 }
 function toggleFilter(k){ state.filter = (k && state.filter!==k) ? k : null; markSelected(); renderLegend(); if(state.level==='list') renderTable(); }
+function counts(){ var c={}; (state.level==='list' ? J : pool()).forEach(function(j){ var k=rawKey(j); c[k]=(c[k]||0)+1; }); return c; }
 function setView(v){
   state.view=v; state.filter=null;
   document.querySelectorAll('#qtabs .qtab').forEach(function(b){ b.setAttribute('aria-selected', b.dataset.view===v ? 'true':'false'); });
@@ -449,8 +487,8 @@ function setView(v){
 
 /* ===================== RECORD DRAWER ===================== */
 function chip(kind,key){ var v=VIEWS[kind]; var lab=(LABELS[kind]||v.desc)[key]||key; return '<span class="chip" style="--dot:'+cssv(v.vars[key])+'">'+esc(lab)+'</span>'; }
-function openDrawer(){ var P=$('panel'); P.classList.add('open'); P.setAttribute('aria-hidden','false'); P.scrollTop=0; }
-function closeDrawer(){ var P=$('panel'); P.classList.remove('open'); P.setAttribute('aria-hidden','true'); }
+function openDrawer(){ var P=$('panel'); P.classList.add('open'); P.setAttribute('aria-hidden','false'); P.scrollTop=0; var w=document.querySelector('.wrap'); if(w) w.classList.add('drawer-open'); }
+function closeDrawer(){ var P=$('panel'); P.classList.remove('open'); P.setAttribute('aria-hidden','true'); var w=document.querySelector('.wrap'); if(w) w.classList.remove('drawer-open'); }
 function renderPanel(){
   var P=$('panel');
   var j = state.sel ? (state.level==='usa' ? USAB[state.sel] : byId[state.sel]) : null;
@@ -541,6 +579,7 @@ function renderTable(){
   var rows=J.filter(function(j){return !isDim(j)}).slice().sort(function(a,b){ var x=a[sortKey],y=b[sortKey]; var xn=(x==null||x==='—'), yn=(y==null||y==='—'); if(xn&&yn) return 0; if(xn) return 1; if(yn) return -1; return (x>y?1:x<y?-1:0)*sortDir; });
   tb.innerHTML=rows.map(function(j){ return '<tr><td class="n" data-id="'+j.id+'">'+esc(j.name)+'</td><td>'+esc(j.region)+'</td><td><span class="dot" style="background:'+cssv(VIEWS.gate.vars[j.gate])+'"></span>'+esc(LABELS.gate[j.gate])+'</td><td><span class="dot" style="background:'+cssv(VIEWS.cert.vars[j.cert])+'"></span>'+esc(LABELS.cert[j.cert])+'</td><td><span class="dot" style="background:'+cssv(VIEWS.process.vars[j.process])+'"></span>'+esc(LABELS.process[j.process])+'</td><td style="max-width:260px">'+(j.trig?'<b>Conditional:</b> '+esc(j.trig):'—')+'</td><td class="mono">'+esc(fmtFC(j))+'</td><td class="mono">'+esc(j.ph)+'</td><td><span class="dot" style="background:'+cssv(VIEWS.conf.vars[j.conf])+'"></span>'+esc(LABELS.conf[j.conf])+'</td></tr>'; }).join('');
   tb.querySelectorAll('td.n').forEach(function(td){ td.addEventListener('click',function(){ state.sel=td.dataset.id; renderPanel(); }); });
+  var lc=$('listcount'); if(lc){ lc.textContent = (rows.length===J.length) ? J.length+' jurisdictions' : rows.length+' of '+J.length+' jurisdictions shown'+(state.filter?' · filtered by "'+labelOf(state.filter)+'"':'')+(state.q?' · search "'+state.q+'"':''); }
 }
 document.querySelectorAll('#tbl th').forEach(function(th){ th.addEventListener('click',function(){ var k=th.dataset.s; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;} renderTable(); }); });
 
@@ -551,8 +590,7 @@ function setLevel(l){
   $('mapcard').classList.toggle('hidden', l==='list');
   $('listcard').classList.toggle('hidden', l!=='list');
   $('focuswrap').style.visibility = l==='world' ? 'visible' : 'hidden';
-  $('hint').textContent = l==='list' ? 'Click a column heading to sort · click a name to open the record' : 'Hover for a summary · click to open the record · scroll or drag to zoom and pan';
-  if(l==='list'){ renderTable(); renderLegend(); }
+  if(l==='list'){ renderLegend(); renderTable(); }
   else { state.sel = (l==='usa' && !USAB[state.sel]) ? null : (l==='world' && USAB[state.sel] ? 'USA' : state.sel); buildMap(); renderLegend(); }
   renderPanel();
 }

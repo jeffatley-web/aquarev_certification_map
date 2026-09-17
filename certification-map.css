@@ -57,7 +57,9 @@
 #arcm .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
 #arcm .eyebrow{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 82;text-transform:uppercase;letter-spacing:.14em;font-size:11.5px;font-weight:600;color:var(--ink-3)}
 #arcm .lab{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-#arcm .wrap{max-width:1440px;margin:0 auto}
+#arcm .wrap{max-width:1440px;margin:0 auto;transition:padding-right .28s cubic-bezier(.2,.8,.2,1)}
+@media (min-width:1100px){#arcm .wrap.drawer-open{padding-right:460px}}
+@media (prefers-reduced-motion:reduce){#arcm .wrap{transition:none}}
 #arcm .hidden{display:none!important}
 
 
@@ -77,8 +79,10 @@
 #arcm .qtab[aria-selected="true"] .d{color:var(--ink-2)}
 
 
-#arcm .mapcard{margin-top:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
-#arcm .mapbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+#arcm .controls{position:relative;margin-top:18px}
+#arcm .mapbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:10px 14px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+
+#arcm .mapcard{margin-top:-1px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
 #arcm .mapbar .grow{flex:1 1 auto}
 #arcm .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:4px;overflow:hidden;background:var(--surface)}
 #arcm .seg button{border:0;background:transparent;padding:7px 12px;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;border-right:1px solid var(--line)}
@@ -104,6 +108,7 @@
 #arcm .res.none{color:var(--ink-3);cursor:default;display:block}
 #arcm .maptitle{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:12px 14px 8px}
 #arcm .maptitle .hint{font-size:12.5px;color:var(--ink-3)}
+#arcm .maptitle .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);flex-basis:100%}
 #arcm .mapwrap{position:relative}
 #arcm #map{width:100%;aspect-ratio:2.5/1;background:var(--sea);position:relative;cursor:grab}
 #arcm #map.usa{aspect-ratio:1.75/1}
@@ -132,7 +137,7 @@
 #arcm .help .foot{font-size:12.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:8px}
 
 
-#arcm .legend{display:flex;flex-wrap:wrap;gap:4px 8px;padding:10px 10px;border-top:1px solid var(--line);align-items:center}
+#arcm .legend{display:flex;flex-wrap:wrap;gap:4px 8px;padding:10px 10px;background:var(--surface);border:1px solid var(--line);border-top:0;align-items:center}
 #arcm .lg{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid transparent;border-radius:999px;background:transparent;color:var(--ink-2);font-size:13px;cursor:pointer;line-height:1.2}
 #arcm .lg .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto;border:1px solid rgba(0,0,0,.08)}
 #arcm .lg .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3)}
@@ -185,7 +190,8 @@
 #arcm .sub .fc{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 
 
-#arcm .listcard{margin-top:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);overflow:auto}
+#arcm .listcard{margin-top:-1px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+#arcm .tablewrap{overflow:auto;max-height:70vh;border-top:1px solid var(--line)}
 #arcm table{border-collapse:collapse;width:100%;min-width:1000px;font-size:13.5px}
 #arcm th{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 85;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);text-align:left;padding:9px 12px;border-bottom:2px solid var(--line-strong);background:var(--surface-2);position:sticky;top:0;cursor:pointer;white-space:nowrap}
 #arcm td{padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
